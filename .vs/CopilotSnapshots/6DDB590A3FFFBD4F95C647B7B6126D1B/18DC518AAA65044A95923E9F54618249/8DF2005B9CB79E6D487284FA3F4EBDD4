@@ -1,0 +1,40 @@
+﻿using EmployeeManagement.Service;
+using EmployeeManagement.Dto.DepartmentModel;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
+namespace EmployeeHandling.Controllers
+{
+    public class DepartmentController(DepartmentService departmentService) : Controller
+    {
+        private readonly DepartmentService _departmentService;
+
+
+
+        [HttpGet]
+        public async Task<IActionResult> FrontPage()
+        {
+            var response = await _departmentService.GetAllDepartment();
+            return View(response); 
+        }
+
+
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new AddDepartmentDto());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(AddDepartmentDto dto)
+        {
+            if (!ModelState.IsValid)
+                return View(dto);
+
+            await _departmentService.AddDepartment(dto.Name);
+            return RedirectToAction("FrontPage"); // Redirect to FrontPage to see the list
+        }
+    }
+}

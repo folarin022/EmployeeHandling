@@ -1,0 +1,51 @@
+﻿using EmployeeHandling.Data;
+using EmployeeManagement.Context;
+using EmployeeManagement.Dto.EmployeeModel;
+using EmployeeManagement.Repository.Interface;
+using Microsoft.EntityFrameworkCore;
+
+namespace EmployeeManagement.Repository
+{
+    public class EmployeeRepository(ApplicationDbContext dbContext) : IEmployeeRepository
+    {
+        public async Task<bool> AddEmployee(AddEmployeeDto request, CancellationToken cancellationToken)
+        {
+            await dbContext.AddAsync(request);
+            return await dbContext.SaveChangesAsync(cancellationToken) > 0;
+        }
+
+        public async Task<bool> DeleteEmployee(Guid Id, CancellationToken cancellationToken)
+        {
+            var employees = await dbContext.Employees.FindAsync(new object[] { Id }, cancellationToken);
+
+            if (employees == null)
+                return false;
+
+            dbContext.Employees.Remove(employees);
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+
+        public async Task<List<Employee>> GetAllEmployee(CancellationToken cancellationToken)
+        {
+           return await dbContext.Employees.ToListAsync();
+        }
+
+        public async Task<Employee> GetEmployeeById(Guid Id, CancellationToken cancellationToken)
+        {
+            return await dbContext.Employees.FirstOrDefaultAsync(p => p.Id == Id, cancellationToken);
+        }
+
+        public Task SaveChangesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<bool> UpdateEmployee(Employee dto, CancellationToken cancellationToken)
+        {
+            dbContext.Employees.Update(dto);
+            return await dbContext.SaveChangesAsync(cancellationToken)> 0;
+        }
+    }
+}
