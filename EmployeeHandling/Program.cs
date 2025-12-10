@@ -1,5 +1,7 @@
 using EmployeeHandling.Context;
+using EmployeeHandling.Repository;
 using EmployeeHandling.Repository.Interface;
+using EmployeeHandling.Service;
 using EmployeeHandling.Service.Interface;
 using EmployeeManagement.Repository;
 using EmployeeManagement.Service;
@@ -16,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Register repository & service
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
 var app = builder.Build();
 

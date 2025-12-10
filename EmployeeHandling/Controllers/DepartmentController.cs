@@ -1,5 +1,4 @@
 ﻿
-using EmployeeManagement.Dto.DepartmentModel;
 using Microsoft.AspNetCore.Mvc;
 using EmployeeHandling.Dto.DepartmentModel;
 using EmployeeHandling.Service.Interface;
@@ -71,7 +70,7 @@ namespace EmployeeHandling.Controllers
 
             return RedirectToAction("FrontPage");
         }
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Delete(Guid id,CancellationToken cancellationToken)
         {
             await _departmentService.DeleteDepartment(id,cancellationToken);

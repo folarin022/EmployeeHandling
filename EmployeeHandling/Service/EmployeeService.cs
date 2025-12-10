@@ -2,8 +2,8 @@
 using EmployeeHandling.Data;
 using EmployeeHandling.Dto;
 using EmployeeHandling.Dto.EmployeeModel;
+using EmployeeHandling.Repository.Interface;
 using EmployeeHandling.Service.Interface;
-using EmployeeManagement.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeHandling.Service
@@ -135,7 +135,7 @@ namespace EmployeeHandling.Service
                     Email = e.Email,
                     PhoneNumber = e.PhoneNumber,
                     Address = e.Address,
-                    //DepartmentName =  e.Department?.Name
+                    DepartmentName =  e.Department?.Name
                 }).ToList();
 
                 response.IsSuccess = true;

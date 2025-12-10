@@ -1,7 +1,5 @@
 ﻿
-using EmployeeHandling.Dto;
-using EmployeeHandling.Dto.DepartmentModel;
-using EmployeeHandling.Dto.EmployeeModel;
+using EmployeeHandling.Dto;using EmployeeHandling.Dto.EmployeeModel;
 
 namespace EmployeeHandling.Service.Interface
 {

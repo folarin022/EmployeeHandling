@@ -1,8 +1,7 @@
 ﻿using EmployeeHandling.Context;
 using EmployeeHandling.Data;
 using EmployeeHandling.Dto.EmployeeModel;
-using EmployeeManagement.Dto.EmployeeModel;
-using EmployeeManagement.Repository.Interface;
+using EmployeeHandling.Repository.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeHandling.Repository

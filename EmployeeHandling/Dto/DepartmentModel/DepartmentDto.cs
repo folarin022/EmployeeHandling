@@ -2,7 +2,7 @@
 
 using EmployeeHandling.Data;
 
-namespace EmployeeManagement.Dto.DepartmentModel
+namespace EmployeeHandling.Dto.DepartmentModel
 {
     public class DepartmentDto
     {

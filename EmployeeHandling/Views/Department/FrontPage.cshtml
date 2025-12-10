@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EmployeeManagement.Dto.DepartmentModel.DepartmentDto>
+﻿@model IEnumerable<EmployeeHandling.Dto.DepartmentModel.DepartmentDto>
 
 @{
     ViewData["Title"] = "Departments";
@@ -18,8 +18,8 @@
                 <tr>
                     <th scope="col">S/N</th>
                     <th scope="col">Department Name</th>
-                    <th scope="col">Employees</th>
                     <th scope="col" class="text-center">Actions</th>
+                    
                 </tr>
             </thead>
             <tbody>
@@ -32,12 +32,6 @@
                             <th scope="row">@counter</th>
                             <td>@dept.Name</td>
                             <td class="text-center">
-                                <a class="btn btn-sm btn-info me-1"
-                                   href="@Url.Action("ByDepartment", "Employee", new { departmentId = dept.Id })">
-                                    <i class="bi bi-people"></i> View Employees
-                                </a>
-                            </td>
-                            <td class="text-center">
                                 <a class="btn btn-sm btn-warning me-1" href="@Url.Action("Edit", "Department", new { id = dept.Id })">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>
@@ -48,6 +42,8 @@
                                         <i class="bi bi-trash"></i> Delete
                                     </button>
                                 </form>
+
+
                             </td>
                         </tr>
                         counter++;
@@ -56,7 +52,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="4" class="text-center text-muted">No departments found.</td>
+                        <td colspan="3" class="text-center text-muted">No departments found.</td>
                     </tr>
                 }
             </tbody>
