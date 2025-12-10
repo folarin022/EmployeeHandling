@@ -1,19 +1,13 @@
-﻿using EmployeeManagement.Service.Interface;
+﻿
 using EmployeeManagement.Dto.DepartmentModel;
 using Microsoft.AspNetCore.Mvc;
-using EmployeeHandling.Dto;
 using EmployeeHandling.Dto.DepartmentModel;
+using EmployeeHandling.Service.Interface;
 
 namespace EmployeeHandling.Controllers
 {
-    public class DepartmentController : Controller
+    public class DepartmentController(IDepartmentService _departmentService) : Controller
     {
-        private readonly IDepartmentService _departmentService;
-
-        public DepartmentController(IDepartmentService departmentService)
-        {
-            _departmentService = departmentService;
-        }
 
         [HttpGet]
         public async Task<IActionResult> FrontPage()
@@ -31,10 +25,8 @@ namespace EmployeeHandling.Controllers
                 Name = d.Name
             }).ToList();
 
-            return View(departments); 
+            return View(departments);
         }
-
-
 
         [HttpGet]
         public IActionResult Create()
@@ -49,7 +41,41 @@ namespace EmployeeHandling.Controllers
                 return View(dto);
 
             await _departmentService.AddDepartment(dto.Name);
-            return RedirectToAction("FrontPage"); // Redirect to FrontPage to see the list
+            return RedirectToAction("FrontPage");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id,CancellationToken cancellationToken)
+        {
+            var response = await _departmentService.GetDepartmentById(id,cancellationToken);
+
+            if (!response.IsSuccess || response.Data == null)
+                return NotFound();
+
+            var dto = new EditDepartmentDto
+            {
+                Id = response.Data.Id,
+                Name = response.Data.Name
+            };
+
+            return View(dto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Guid Id, EditDepartmentDto dto,CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+                return View(dto);
+
+            await _departmentService.UpdateDepartment(Id,dto,cancellationToken);
+
+            return RedirectToAction("FrontPage");
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid id,CancellationToken cancellationToken)
+        {
+            await _departmentService.DeleteDepartment(id,cancellationToken);
+            return RedirectToAction("FrontPage");
         }
     }
 }

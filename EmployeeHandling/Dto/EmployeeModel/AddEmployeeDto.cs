@@ -1,4 +1,4 @@
-﻿namespace EmployeeManagement.Dto.EmployeeModel
+﻿namespace EmployeeHandling.Dto.EmployeeModel
 {
     public class AddEmployeeDto
     {
@@ -7,6 +7,7 @@
         public required string Email { get; set; }
         public required string PhoneNumber { get; set; }
         public required string Address { get; set; }
+        public Guid DepartmentId { get; set; }
         public string  DepartmentName { get; set; }
     }
 }

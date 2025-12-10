@@ -1,11 +1,10 @@
-﻿using EmployeeHandling.Data;
+﻿using EmployeeHandling.Context;
+using EmployeeHandling.Data;
 using EmployeeHandling.Dto;
-using EmployeeManagement.Context;
-using EmployeeManagement.Dto;
-using EmployeeManagement.Dto.DepartmentModel;
-using EmployeeManagement.Dto.EmployeeModel;
-using EmployeeManagement.Repository.Interface;
-using EmployeeManagement.Service.Interface;
+using EmployeeHandling.Dto.DepartmentModel;
+using EmployeeHandling.Dto.EmployeeModel;
+using EmployeeHandling.Repository.Interface;
+using EmployeeHandling.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Service
@@ -30,7 +29,6 @@ namespace EmployeeManagement.Service
         public async Task<BaseResponse<Department>> AddDepartment(string name)
         {
             var response = new BaseResponse<Department>();
-            //_logger.LogInformation("Adding new department: {DepartmentName}", name.);
 
             try
             {
@@ -59,38 +57,38 @@ namespace EmployeeManagement.Service
             return response;
         }
 
-        //    public async Task<BaseResponse<bool>> DeleteDepartment(Guid id, CancellationToken cancellationToken)
-        //    {
-        //        var response = new BaseResponse<bool>();
-        //        _logger.LogInformation("Deleting department with ID: {DepartmentId}", id);
+        public async Task<BaseResponse<bool>> DeleteDepartment(Guid id, CancellationToken cancellationToken)
+        {
+            var response = new BaseResponse<bool>();
+            _logger.LogInformation("Deleting department with ID: {DepartmentId}", id);
 
-        //        try
-        //        {
-        //            var isDeleted = await _departmentRepository.DeleteDepartment(id, cancellationToken);
-        //            if (!isDeleted)
-        //            {
-        //                _logger.LogWarning("Failed to delete department with ID: {DepartmentId}", id);
-        //                response.IsSuccess = false;
-        //                response.Data = false;
-        //                response.Message = "Failed to delete department";
-        //                return response;
-        //            }
+            try
+            {
+                var isDeleted = await _departmentRepository.DeleteDepartment(id, cancellationToken);
+                if (!isDeleted)
+                {
+                    _logger.LogWarning("Failed to delete department with ID: {DepartmentId}", id);
+                    response.IsSuccess = false;
+                    response.Data = false;
+                    response.Message = "Failed to delete department";
+                    return response;
+                }
 
-        //            _logger.LogInformation("Department deleted successfully with ID: {DepartmentId}", id);
-        //            response.IsSuccess = true;
-        //            response.Data = true;
-        //            response.Message = "Department deleted successfully";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _logger.LogError(ex, "Error deleting department with ID: {DepartmentId}", id);
-        //            response.IsSuccess = false;
-        //            response.Data = false;
-        //            response.Message = $"Error deleting department: {ex.Message}";
-        //        }
+                _logger.LogInformation("Department deleted successfully with ID: {DepartmentId}", id);
+                response.IsSuccess = true;
+                response.Data = true;
+                response.Message = "Department deleted successfully";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting department with ID: {DepartmentId}", id);
+                response.IsSuccess = false;
+                response.Data = false;
+                response.Message = $"Error deleting department: {ex.Message}";
+            }
 
-        //        return response;
-        //    }
+            return response;
+        }
 
         public async Task<BaseResponse<List<DepartmentResponseDto>>> GetAllDepartment()
         {
@@ -136,79 +134,79 @@ namespace EmployeeManagement.Service
             return response;
         }
 
-        //    public async Task<BaseResponse<DepartmentResponseDto>> GetDepartmentById(Guid id, CancellationToken cancellationToken)
-        //    {
-        //        var response = new BaseResponse<DepartmentResponseDto>();
-        //        _logger.LogInformation("Fetching department with ID: {DepartmentId}", id);
+        public async Task<BaseResponse<DepartmentResponseDto>> GetDepartmentById(Guid id, CancellationToken cancellationToken)
+        {
+            var response = new BaseResponse<DepartmentResponseDto>();
+            _logger.LogInformation("Fetching department with ID: {DepartmentId}", id);
 
-        //        try
-        //        {
-        //            var department = await _dbContext.Departments
-        //                .Include(d => d.Employees)
-        //                .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
+            try
+            {
+                var department = await _dbContext.Departments
+                    .Include(d => d.Employees)
+                    .FirstOrDefaultAsync(d => d.Id == id, cancellationToken);
 
-        //            if (department == null)
-        //            {
-        //                _logger.LogWarning("Department not found with ID: {DepartmentId}", id);
-        //                response.IsSuccess = false;
-        //                response.Message = "Department not found";
-        //                return response;
-        //            }
+                if (department == null)
+                {
+                    _logger.LogWarning("Department not found with ID: {DepartmentId}", id);
+                    response.IsSuccess = false;
+                    response.Message = "Department not found";
+                    return response;
+                }
 
-        //            var dto = new DepartmentResponseDto
-        //            {
-        //                Id = department.Id,
-        //                Name = department.Name,
-        //                Employees = department.Employees.Select(e => new EmployeeResponseDto
-        //                {
-        //                    Id = e.Id,
-        //                    FirstName = e.FirstName,
-        //                    LastName = e.LastName,
-        //                    Email = e.Email,
-        //                    PhoneNumber = e.PhoneNumber,
-        //                    Address = e.Address,
-        //                    DepartmentName = department.Name
-        //                }).ToList()
-        //            };
+                var dto = new DepartmentResponseDto
+                {
+                    Id = department.Id,
+                    Name = department.Name,
+                    Employees = department.Employees.Select(e => new EmployeeResponseDto
+                    {
+                        Id = e.Id,
+                        FirstName = e.FirstName,
+                        LastName = e.LastName,
+                        Email = e.Email,
+                        PhoneNumber = e.PhoneNumber,
+                        Address = e.Address,
+                        DepartmentName = department.Name
+                    }).ToList()
+                };
 
-        //            response.IsSuccess = true;
-        //            response.Data = dto;
-        //            response.Message = "Department retrieved successfully";
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            _logger.LogError(ex, "Error retrieving department with ID: {DepartmentId}", id);
-        //            response.IsSuccess = false;
-        //            response.Data = null;
-        //            response.Message = $"Error retrieving department: {ex.Message}";
-        //        }
+                response.IsSuccess = true;
+                response.Data = dto;
+                response.Message = "Department retrieved successfully";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving department with ID: {DepartmentId}", id);
+                response.IsSuccess = false;
+                response.Data = null;
+                response.Message = $"Error retrieving department: {ex.Message}";
+            }
 
-        //        return response;
-        //    }
+            return response;
+        }
 
 
-        //    public async Task<BaseResponse<bool>> UpdateDepartment(Guid id, AddDepartmentDto request, CancellationToken cancellationToken)
-        //    {
-        //        var response = new BaseResponse<bool>();
+        public async Task<BaseResponse<bool>> UpdateDepartment(Guid id, EditDepartmentDto request, CancellationToken cancellationToken)
+        {
+            var response = new BaseResponse<bool>();
 
-        //        var department = await _departmentRepository.GetDepartmentById(id, cancellationToken);
+            var department = await _departmentRepository.GetDepartmentById(id, cancellationToken);
 
-        //        if (department == null)
-        //        {
-        //            response.IsSuccess = false;
-        //            response.Message = "Department not found";
-        //            return response;
-        //        }
+            if (department == null)
+            {
+                response.IsSuccess = false;
+                response.Message = "Department not found";
+                return response;
+            }
 
-        //        department.Name = request.Name;
+            department.Name = request.Name;
 
-        //        await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
 
-        //        response.IsSuccess = true;
-        //        response.Data = true;
-        //        response.Message = "Department updated successfully";
-        //        return response;
-        //    }
+            response.IsSuccess = true;
+            response.Data = true;
+            response.Message = "Department updated successfully";
+            return response;
+        }
 
     }
 }

@@ -1,7 +1,7 @@
 ﻿using EmployeeHandling.Data;
 using EmployeeHandling.Dto.DepartmentModel;
 
-namespace EmployeeManagement.Repository.Interface
+namespace EmployeeHandling.Repository.Interface
 {
     public interface IDepartmentRepository
     {

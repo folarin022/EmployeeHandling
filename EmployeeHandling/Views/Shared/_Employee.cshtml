@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Employee</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Employee" asp-action="Index">Employees</a></li>
+                <li><a asp-controller="Employee" asp-action="Create">Add Employee</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

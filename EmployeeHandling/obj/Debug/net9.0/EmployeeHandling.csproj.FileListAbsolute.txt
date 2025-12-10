@@ -227,3 +227,4 @@ C:\Users\admas\source\repos\EmployeeHandling\EmployeeHandling\bin\Debug\net9.0\r
 C:\Users\admas\source\repos\EmployeeHandling\EmployeeHandling\bin\Debug\net9.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\admas\source\repos\EmployeeHandling\EmployeeHandling\bin\Debug\net9.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\admas\source\repos\EmployeeHandling\EmployeeHandling\bin\Debug\net9.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
+C:\Users\admas\source\repos\EmployeeHandling\EmployeeHandling\obj\Debug\net9.0\EmployeeHandling.sourcelink.json

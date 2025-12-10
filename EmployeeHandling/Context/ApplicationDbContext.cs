@@ -1,7 +1,7 @@
 ﻿using EmployeeHandling.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace EmployeeManagement.Context
+namespace EmployeeHandling.Context
 {
     public class ApplicationDbContext : DbContext
     {

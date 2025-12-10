@@ -1,8 +1,8 @@
-using EmployeeManagement.Context;
+using EmployeeHandling.Context;
+using EmployeeHandling.Repository.Interface;
+using EmployeeHandling.Service.Interface;
 using EmployeeManagement.Repository;
-using EmployeeManagement.Repository.Interface;
 using EmployeeManagement.Service;
-using EmployeeManagement.Service.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

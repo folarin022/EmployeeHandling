@@ -32,8 +32,20 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxDcmVhdGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Department/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Department/FrontPage.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGVwYXJ0bWVudFxGcm9udFBhZ2UuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Employee/CreateEmployee.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVcQ3JlYXRlRW1wbG95ZWUuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Employee/RearPage.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRW1wbG95ZWVcUmVhclBhZ2UuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Home/Index.cshtml]
@@ -50,6 +62,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Shared/_DepartmentLayout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9EZXBhcnRtZW50TGF5b3V0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Shared/_Employee.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9FbXBsb3llZS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/admas/source/repos/EmployeeHandling/EmployeeHandling/Views/Shared/_ValidationScriptsPartial.cshtml]
