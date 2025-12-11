@@ -60,38 +60,18 @@ namespace EmployeeHandling.Controllers
                 return View(dto);
             }
 
+            TempData["ToastMessage"] = $"success|Department added successfully!";
             return RedirectToAction("FrontPage");
         }
 
-
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
-        {
-            var response = await _departmentService.GetDepartmentById(id, cancellationToken);
-
-            if (!response.IsSuccess || response.Data == null)
-                return NotFound();
-
-            var dto = new EditDepartmentDto
-            {
-                Id = response.Data.Id,
-                Name = response.Data.Name
-            };
-
-            return View(dto);
-        }
-
-
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditDepartmentDto dto,CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(EditDepartmentDto dto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return View(dto);
 
-            var result = await _departmentService.UpdateDepartment(dto.Id, dto,cancellationToken);
+            var result = await _departmentService.UpdateDepartment(dto.Id, dto, cancellationToken);
 
             if (!result.IsSuccess)
             {
@@ -99,24 +79,30 @@ namespace EmployeeHandling.Controllers
                 return View(dto);
             }
 
+            TempData["ToastMessage"] = $"success|Department updated successfully!";
             return RedirectToAction("FrontPage");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(Guid id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
         {
             if (id == Guid.Empty)
                 return BadRequest();
 
-            var result = await _departmentService.DeleteDepartment(id,cancellationToken);
+            var result = await _departmentService.DeleteDepartment(id, cancellationToken);
 
-            if (!result.IsSuccess)
+            if (!result.IsSuccess) 
             {
-                TempData["Error"] = result.Message;
+                TempData["ToastMessage"] = $"error|{result.Message}";
+            }
+            else
+            {
+                TempData["ToastMessage"] = "success|Department deleted successfully!";
             }
 
             return RedirectToAction("FrontPage");
         }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using EmployeeHandling.Dto.EmployeeModel;
+﻿using EmployeeHandling.Dto;
+using EmployeeHandling.Dto.EmployeeModel;
 using EmployeeHandling.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
@@ -19,14 +20,12 @@ namespace EmployeeHandling.Controllers
         {
             var response = await _employeeService.GetAllEmployee(cancellationToken);
 
-            if (response == null || !response.IsSuccess || response.Data == null)
-            {
-                return View(Enumerable.Empty<EmployeeViewModel>());
-            }
+            if (!response.IsSuccess || response.Data == null)
+                return View(Enumerable.Empty<EmployeeHandling.Dto.EmployeeModel.EmployeeViewModel>());
 
-            var employeesForView = response.Data.Select(e => new EmployeeViewModel
+            var employeesForView = response.Data.Select(e => new EmployeeHandling.Dto.EmployeeModel.EmployeeViewModel
             {
-                //Id = e.Id,
+                Id = e.Id,
                 FirstName = e.FirstName,
                 LastName = e.LastName,
                 Department = e.DepartmentName
@@ -34,7 +33,6 @@ namespace EmployeeHandling.Controllers
 
             return View(employeesForView);
         }
-
         [HttpGet]
         public async Task<IActionResult> CreateEmployee()
         {
@@ -53,6 +51,7 @@ namespace EmployeeHandling.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateEmployee(AddEmployeeDto dto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
@@ -62,26 +61,8 @@ namespace EmployeeHandling.Controllers
             }
 
             await _employeeService.AddEmployee(dto, cancellationToken);
+            TempData.Success("Employee added successfully!");
             return RedirectToAction("RearPage");
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> EditEmployee(Guid id, CancellationToken cancellationToken)
-        {
-            var response = await _employeeService.GetEmployeeById(id, cancellationToken);
-            if (!response.IsSuccess || response.Data == null)
-                return NotFound();
-
-            var dto = new AddEmployeeDto
-            {
-                //Id = response.Data.Id,
-                FirstName = response.Data.FirstName,
-                LastName = response.Data.LastName,
-                DepartmentId = response.Data.DepartmentId,
-                DepartmentName = response.Data.DepartmentName
-            };
-            return View(dto);
         }
 
         [HttpPost]
@@ -91,6 +72,7 @@ namespace EmployeeHandling.Controllers
                 return View(dto);
 
             await _employeeService.UpdateEmployee(id, dto, cancellationToken);
+            TempData.Success("Employee updated successfully!");
             return RedirectToAction("RearPage");
         }
 
@@ -98,7 +80,9 @@ namespace EmployeeHandling.Controllers
         public async Task<IActionResult> DeleteEmployee(Guid id, CancellationToken cancellationToken)
         {
             await _employeeService.DeleteEmployee(id, cancellationToken);
+            TempData.Success("Employee deleted successfully!");
             return RedirectToAction("RearPage");
         }
+
     }
 }

@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/EmployeeHandling.styles.css" asp-append-version="true" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+
 </head>
 <body>
     <header>
@@ -53,5 +55,26 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        $(function () {
+            var toastMessage = '@TempData["ToastMessage"]';
+            if (toastMessage) {
+                var parts = toastMessage.split('|');
+                var type = parts[0];
+                var message = parts[1];
+
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right"
+                };
+
+                if(type === "success") toastr.success(message);
+                if(type === "error") toastr.error(message);
+            }
+        });
+    </script>
+
 </body>
 </html>
