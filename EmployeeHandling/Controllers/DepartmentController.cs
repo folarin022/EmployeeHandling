@@ -1,12 +1,20 @@
-﻿
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using EmployeeHandling.Dto;
 using EmployeeHandling.Dto.DepartmentModel;
 using EmployeeHandling.Service.Interface;
 
 namespace EmployeeHandling.Controllers
 {
-    public class DepartmentController(IDepartmentService _departmentService) : Controller
+    public class DepartmentController : Controller
     {
+        private readonly IDepartmentService _departmentService;
+
+        public DepartmentController(IDepartmentService departmentService)
+        {
+            _departmentService = departmentService;
+        }
+
+
 
         [HttpGet]
         public async Task<IActionResult> FrontPage()
@@ -27,26 +35,40 @@ namespace EmployeeHandling.Controllers
             return View(departments);
         }
 
+
+
         [HttpGet]
         public IActionResult Create()
         {
             return View(new AddDepartmentDto());
         }
 
+
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AddDepartmentDto dto)
         {
             if (!ModelState.IsValid)
                 return View(dto);
 
-            await _departmentService.AddDepartment(dto.Name);
+            var result = await _departmentService.AddDepartment(dto);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View(dto);
+            }
+
             return RedirectToAction("FrontPage");
         }
 
+
+
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
         {
-            var response = await _departmentService.GetDepartmentById(id,cancellationToken);
+            var response = await _departmentService.GetDepartmentById(id, cancellationToken);
 
             if (!response.IsSuccess || response.Data == null)
                 return NotFound();
@@ -60,20 +82,40 @@ namespace EmployeeHandling.Controllers
             return View(dto);
         }
 
+
+
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid Id, EditDepartmentDto dto,CancellationToken cancellationToken)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditDepartmentDto dto,CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return View(dto);
 
-            await _departmentService.UpdateDepartment(Id,dto,cancellationToken);
+            var result = await _departmentService.UpdateDepartment(dto.Id, dto,cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View(dto);
+            }
 
             return RedirectToAction("FrontPage");
         }
+
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id,CancellationToken cancellationToken)
         {
-            await _departmentService.DeleteDepartment(id,cancellationToken);
+            if (id == Guid.Empty)
+                return BadRequest();
+
+            var result = await _departmentService.DeleteDepartment(id,cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                TempData["Error"] = result.Message;
+            }
+
             return RedirectToAction("FrontPage");
         }
     }

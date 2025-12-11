@@ -26,7 +26,7 @@ namespace EmployeeManagement.Service
             _dbContext = dbContext;
         }
 
-        public async Task<BaseResponse<Department>> AddDepartment(string name)
+        public async Task<BaseResponse<Department>> AddDepartment(AddDepartmentDto dto)
         {
             var response = new BaseResponse<Department>();
 
@@ -34,13 +34,11 @@ namespace EmployeeManagement.Service
             {
                 var department = new Department
                 {
-                    Name = name,
+                    Name = dto.Name
                 };
 
                 _dbContext.Departments.Add(department);
                 await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation("Department added successfully with ID: {DepartmentId}", department.Id);
 
                 response.IsSuccess = true;
                 response.Data = department;
@@ -48,14 +46,15 @@ namespace EmployeeManagement.Service
             }
             catch (Exception ex)
             {
-                //_logger.LogError(ex, "Error adding department: {DepartmentName}", dto.Name);
                 response.IsSuccess = false;
-                response.Data = null;
                 response.Message = $"Error adding department: {ex.Message}";
             }
 
             return response;
         }
+
+
+
 
         public async Task<BaseResponse<bool>> DeleteDepartment(Guid id, CancellationToken cancellationToken)
         {

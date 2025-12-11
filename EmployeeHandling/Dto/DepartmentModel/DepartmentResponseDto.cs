@@ -1,7 +1,7 @@
 ﻿using EmployeeHandling.Dto.EmployeeModel;
 using EmployeeManagement.Dto.EmployeeModel;
 
-namespace EmployeeHandling.Dto
+namespace EmployeeHandling.Dto.DepartmentModel
 {
     public class DepartmentResponseDto
     {
