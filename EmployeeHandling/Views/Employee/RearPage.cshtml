@@ -1,4 +1,4 @@
-﻿@model IEnumerable<EmployeeHandling.Dto.EmployeeModel.>
+﻿@model IEnumerable<EmployeeHandling.Dto.EmployeeModel.EmployeeViewModel>
 
 @{
     ViewData["Title"] = "Employee List";
@@ -38,10 +38,7 @@
                                     <th scope="row">@counter</th>
                                     <td>@emp.FirstName</td>
                                     <td>@emp.LastName</td>
-                                    <td>@emp.Email</td>
-                                    <td>@emp.PhoneNumber</td>
-                                    <td>@emp.Address</td>
-                                    <td>@emp.DepartmentName</td>
+                                    <td>@emp.Department</td>
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
 

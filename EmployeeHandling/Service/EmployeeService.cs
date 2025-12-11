@@ -4,6 +4,7 @@ using EmployeeHandling.Dto;
 using EmployeeHandling.Dto.EmployeeModel;
 using EmployeeHandling.Repository.Interface;
 using EmployeeHandling.Service.Interface;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeHandling.Service
@@ -152,6 +153,17 @@ namespace EmployeeHandling.Service
             }
 
             return response;
+        }
+
+        public  async Task<List<SelectListItem>> GetDepartmentsForDropdown()
+        {
+                return await _dbContext.Departments
+                    .Select(d => new SelectListItem
+                    {
+                        Value = d.Id.ToString(),
+                        Text = d.Name
+                    })
+                    .ToListAsync();
         }
 
         public async Task<BaseResponse<EmployeeResponseDto>> GetEmployeeById(Guid id, CancellationToken cancellationToken)

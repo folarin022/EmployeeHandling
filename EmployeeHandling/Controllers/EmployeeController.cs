@@ -1,13 +1,19 @@
-﻿using EmployeeHandling.Data;
-using EmployeeHandling.Dto;
-using EmployeeHandling.Dto.EmployeeModel;
+﻿using EmployeeHandling.Dto.EmployeeModel;
 using EmployeeHandling.Service.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace EmployeeHandling.Controllers
 {
-    public class EmployeeController(IEmployeeService _employeeService) : Controller
+    public class EmployeeController : Controller
     {
+        private readonly IEmployeeService _employeeService;
+
+        public EmployeeController(IEmployeeService employeeService)
+        {
+            _employeeService = employeeService;
+        }
+
         [HttpGet]
         public async Task<IActionResult> RearPage(CancellationToken cancellationToken)
         {
@@ -15,11 +21,12 @@ namespace EmployeeHandling.Controllers
 
             if (response == null || !response.IsSuccess || response.Data == null)
             {
-                return View(Enumerable.Empty<EmployeeHandling.Data.EmployeeViewModel>());
+                return View(Enumerable.Empty<EmployeeViewModel>());
             }
 
-            var employeesForView = response.Data.Select(e => new EmployeeHandling.Data.EmployeeViewModel
+            var employeesForView = response.Data.Select(e => new EmployeeViewModel
             {
+                //Id = e.Id,
                 FirstName = e.FirstName,
                 LastName = e.LastName,
                 Department = e.DepartmentName
@@ -29,25 +36,35 @@ namespace EmployeeHandling.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateEmployee() => View(new Dto.EmployeeModel.AddEmployeeDto
+        public async Task<IActionResult> CreateEmployee()
         {
-            FirstName = string.Empty,
-            LastName = string.Empty,
-            Email = string.Empty,
-            PhoneNumber = string.Empty,
-            Address = string.Empty,
-            DepartmentId = Guid.Empty,
-            DepartmentName = string.Empty
-        });
+            var dto = new AddEmployeeDto
+            {
+                FirstName = string.Empty,
+                LastName = string.Empty,
+                Email = string.Empty,
+                PhoneNumber = string.Empty,
+                Address = string.Empty,
+                DepartmentId = Guid.Empty,
+                Departments = await _employeeService.GetDepartmentsForDropdown()
+            };
+
+            return View(dto);
+        }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEmployee(Dto.EmployeeModel.AddEmployeeDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateEmployee(AddEmployeeDto dto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
+            {
+                dto.Departments = await _employeeService.GetDepartmentsForDropdown();
                 return View(dto);
+            }
+
             await _employeeService.AddEmployee(dto, cancellationToken);
             return RedirectToAction("RearPage");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> EditEmployee(Guid id, CancellationToken cancellationToken)
@@ -55,13 +72,12 @@ namespace EmployeeHandling.Controllers
             var response = await _employeeService.GetEmployeeById(id, cancellationToken);
             if (!response.IsSuccess || response.Data == null)
                 return NotFound();
-            var dto = new Dto.EmployeeModel.AddEmployeeDto
+
+            var dto = new AddEmployeeDto
             {
+                //Id = response.Data.Id,
                 FirstName = response.Data.FirstName,
                 LastName = response.Data.LastName,
-                Email = response.Data.Email,
-                PhoneNumber = response.Data.PhoneNumber,
-                Address = response.Data.Address,
                 DepartmentId = response.Data.DepartmentId,
                 DepartmentName = response.Data.DepartmentName
             };
@@ -69,10 +85,11 @@ namespace EmployeeHandling.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditEmployee(Guid id, Dto.EmployeeModel.AddEmployeeDto dto, CancellationToken cancellationToken)
+        public async Task<IActionResult> EditEmployee(Guid id, AddEmployeeDto dto, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
                 return View(dto);
+
             await _employeeService.UpdateEmployee(id, dto, cancellationToken);
             return RedirectToAction("RearPage");
         }
