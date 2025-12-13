@@ -12,6 +12,6 @@ namespace EmployeeHandling.Service.Interface
         Task<BaseResponse<EmployeeResponseDto>> GetEmployeeById(Guid Id, CancellationToken cancellationToken);
         Task<List<SelectListItem>> GetDepartmentsForDropdown();
         Task<BaseResponse<bool>> DeleteEmployee(Guid Id, CancellationToken cancellationToken);
-        Task<BaseResponse<bool>> UpdateEmployee(Guid Id, AddEmployeeDto dto, CancellationToken cancellationToken);
+        Task<BaseResponse<bool>> UpdateEmployee(Guid Id,EditEmployeeDto dto, CancellationToken cancellationToken);
     }
 }

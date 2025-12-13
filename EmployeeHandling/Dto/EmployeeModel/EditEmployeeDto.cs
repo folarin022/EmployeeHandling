@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeHandling.Dto.EmployeeModel
 {
-    public class AddEmployeeDto
+    public class EditEmployeeDto
     {
+        public Guid Id { get; set; }
+
         [Required]
         public string FirstName { get; set; }
 

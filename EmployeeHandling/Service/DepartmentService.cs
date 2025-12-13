@@ -112,7 +112,7 @@ namespace EmployeeManagement.Service
                         Email = e.Email,
                         Address = e.Address,
                         PhoneNumber = e.PhoneNumber,
-                        DepartmentName = d.Name
+                        Department = d.Name
                     }).ToList()
                 }).ToList();
 
@@ -164,7 +164,7 @@ namespace EmployeeManagement.Service
                         Email = e.Email,
                         PhoneNumber = e.PhoneNumber,
                         Address = e.Address,
-                        DepartmentName = department.Name
+                        Department = department.Name
                     }).ToList()
                 };
 

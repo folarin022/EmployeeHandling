@@ -29,16 +29,14 @@ namespace EmployeeHandling.Service
         public async Task<BaseResponse<EmployeeResponseDto>> AddEmployee(AddEmployeeDto request, CancellationToken cancellationToken)
         {
             var response = new BaseResponse<EmployeeResponseDto>();
-            _logger.LogInformation("Adding new employee: {FirstName} {LastName}", request.FirstName, request.LastName);
 
             try
             {
                 var department = await _dbContext.Departments
-                    .FirstOrDefaultAsync(d => d.Name == request.DepartmentName, cancellationToken);
+                    .FirstOrDefaultAsync(d => d.Id == request.DepartmentId, cancellationToken);
 
                 if (department == null)
                 {
-                    _logger.LogWarning("Department not found: {DepartmentName}", request.DepartmentName);
                     response.IsSuccess = false;
                     response.Message = "Department not found";
                     return response;
@@ -49,40 +47,32 @@ namespace EmployeeHandling.Service
                     Id = Guid.NewGuid(),
                     FirstName = request.FirstName,
                     LastName = request.LastName,
+                    OtherName = request.OtherName,
+                    Gender = request.Gender,
                     Email = request.Email,
                     Address = request.Address,
                     PhoneNumber = request.PhoneNumber,
-                    DepartmentId = department.Id,
+                    DepartmentId = request.DepartmentId
                 };
 
                 _dbContext.Employees.Add(employee);
-                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation("Adding employee: {FirstName} {LastName}", request.FirstName, request.LastName);
+                await _dbContext.SaveChangesAsync(cancellationToken);
+                _logger.LogInformation("Employee added with ID: {Id}", employee.Id);
 
-                _logger.LogInformation("Employee added successfully with ID: {EmployeeId}", employee.Id);
 
                 response.IsSuccess = true;
-                response.Data = new EmployeeResponseDto
-                {
-                    Id = employee.Id,
-                    FirstName = employee.FirstName,
-                    LastName = employee.LastName,
-                    Email = employee.Email,
-                    Address = employee.Address,
-                    PhoneNumber = employee.PhoneNumber,
-                    DepartmentName = department.Name
-                };
                 response.Message = "Employee added successfully";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error adding employee: {FirstName} {LastName}", request.FirstName, request.LastName);
                 response.IsSuccess = false;
-                response.Data = null;
-                response.Message = $"Error adding employee: {ex.Message}";
+                response.Message = ex.Message;
             }
 
             return response;
         }
+
 
         public async Task<BaseResponse<bool>> DeleteEmployee(Guid id, CancellationToken cancellationToken)
         {
@@ -133,10 +123,13 @@ namespace EmployeeHandling.Service
                     Id = e.Id,
                     FirstName = e.FirstName,
                     LastName = e.LastName,
+                    OtherName = e.OtherName,
+                    Gender = e.Gender,
                     Email = e.Email,
                     PhoneNumber = e.PhoneNumber,
                     Address = e.Address,
-                    DepartmentName =  e.Department?.Name
+                    DepartmentId = e.DepartmentId,           
+                    Department = e.Department?.Name
                 }).ToList();
 
                 response.IsSuccess = true;
@@ -155,15 +148,15 @@ namespace EmployeeHandling.Service
             return response;
         }
 
-        public  async Task<List<SelectListItem>> GetDepartmentsForDropdown()
+        public async Task<List<SelectListItem>> GetDepartmentsForDropdown()
         {
-                return await _dbContext.Departments
-                    .Select(d => new SelectListItem
-                    {
-                        Value = d.Id.ToString(),
-                        Text = d.Name
-                    })
-                    .ToListAsync();
+            return await _dbContext.Departments
+                .Select(d => new SelectListItem
+                {
+                    Value = d.Id.ToString(),
+                    Text = d.Name
+                })
+                .ToListAsync();
         }
 
         public async Task<BaseResponse<EmployeeResponseDto>> GetEmployeeById(Guid id, CancellationToken cancellationToken)
@@ -192,7 +185,7 @@ namespace EmployeeHandling.Service
                     Email = employee.Email,
                     PhoneNumber = employee.PhoneNumber,
                     Address = employee.Address,
-                    DepartmentName = employee.Department.Name
+                    Department = employee.Department.Name
                 };
                 response.Message = "Employee retrieved successfully";
             }
@@ -207,54 +200,59 @@ namespace EmployeeHandling.Service
             return response;
         }
 
-        public async Task<BaseResponse<bool>> UpdateEmployee(Guid id, AddEmployeeDto request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<bool>> UpdateEmployee(Guid Id,EditEmployeeDto request, CancellationToken cancellationToken)
         {
             var response = new BaseResponse<bool>();
-            _logger.LogInformation("Updating employee with ID: {EmployeeId}", id);
 
             try
             {
                 var employee = await _dbContext.Employees
-                    .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+                    .FirstOrDefaultAsync(e => e.Id == Id, cancellationToken);
 
                 if (employee == null)
                 {
-                    _logger.LogWarning("Employee not found with ID: {EmployeeId}", id);
+                    _logger.LogWarning("Employee not found with ID: {EmployeeId}", Id);
                     response.IsSuccess = false;
                     response.Message = "Employee not found";
                     response.Data = false;
                     return response;
                 }
 
+
+
                 var department = await _dbContext.Departments
-                    .FirstOrDefaultAsync(d => d.Name == request.DepartmentName, cancellationToken);
+                    .FirstOrDefaultAsync(d => d.Id == request.DepartmentId, cancellationToken);
 
                 if (department == null)
                 {
-                    _logger.LogWarning("Department not found: {DepartmentName}", request.DepartmentName);
+                    _logger.LogWarning("Department not found with ID: {DepartmentId}", request.DepartmentId);
                     response.IsSuccess = false;
                     response.Message = "Department not found";
                     response.Data = false;
                     return response;
                 }
 
+
+
                 employee.FirstName = request.FirstName;
                 employee.LastName = request.LastName;
+                employee.OtherName = request.OtherName;
+                employee.Gender = request.Gender;
                 employee.Email = request.Email;
                 employee.Address = request.Address;
                 employee.PhoneNumber = request.PhoneNumber;
-                employee.DepartmentId = department.Id;
+                employee.DepartmentId = request.DepartmentId;
 
-                await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync(cancellationToken);
 
-                _logger.LogInformation("Employee updated successfully with ID: {EmployeeId}", id);
+                _logger.LogInformation("Employee updated successfully with ID: {EmployeeId}", Id);
                 response.IsSuccess = true;
                 response.Data = true;
                 response.Message = "Employee updated successfully";
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error updating employee with ID: {EmployeeId}", id);
+                _logger.LogError(ex, "Error updating employee with ID: {EmployeeId}", Id);
                 response.IsSuccess = false;
                 response.Data = false;
                 response.Message = $"Error updating employee: {ex.InnerException?.Message ?? ex.Message}";
@@ -262,5 +260,6 @@ namespace EmployeeHandling.Service
 
             return response;
         }
+
     }
 }

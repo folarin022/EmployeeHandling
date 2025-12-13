@@ -10,8 +10,9 @@
             <h3 class="mb-0">Add New Employee</h3>
         </div>
         <div class="card-body">
-            <form asp-action="CreateEmployee" method="post">
+            <form asp-action="CreateEmployee" asp-controller="Employee" method="post">
                 @Html.AntiForgeryToken()
+
 
                 <div class="row mb-3">
                     <div class="col-md-6">
@@ -19,22 +20,32 @@
                         <input asp-for="FirstName" class="form-control" />
                         <span asp-validation-for="FirstName" class="text-danger"></span>
                     </div>
+
                     <div class="col-md-6">
                         <label asp-for="LastName" class="form-label"></label>
                         <input asp-for="LastName" class="form-control" />
                         <span asp-validation-for="LastName" class="text-danger"></span>
                     </div>
+                </div>
+
+                <div class="row mb-3">
                     <div class="col-md-6">
                         <label asp-for="OtherName" class="form-label"></label>
                         <input asp-for="OtherName" class="form-control" />
                         <span asp-validation-for="OtherName" class="text-danger"></span>
                     </div>
+
                     <div class="col-md-6">
                         <label asp-for="Gender" class="form-label"></label>
-                        <input asp-for="Gender" class="form-control" />
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">-- Select Gender --</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
                         <span asp-validation-for="Gender" class="text-danger"></span>
                     </div>
                 </div>
+
 
                 <div class="row mb-3">
                     <div class="col-md-6">
@@ -63,14 +74,17 @@
                     <span asp-validation-for="DepartmentId" class="text-danger"></span>
                 </div>
 
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary me-2">
+                <div class="d-flex justify-content-between">
+                    <a class="btn btn-secondary" href="@Url.Action("RearPage", "Employee")">
+                        <i class="bi bi-arrow-left"></i> Back
+                    </a>
+
+                    <button type="submit" class="btn btn-primary">
                         <i class="bi bi-plus-circle"></i> Add Employee
                     </button>
-                    <a asp-action="RearPage" asp-controller="Employee" class="btn btn-secondary">
-                        <i class="bi bi-arrow-left"></i> Cancel
-                    </a>
+
                 </div>
+
             </form>
         </div>
     </div>
