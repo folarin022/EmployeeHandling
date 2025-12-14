@@ -1,0 +1,34 @@
+﻿@model EmployeeHandling.Dto.DepartmentModel.DepartmentDto
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm rounded-lg">
+        <div class="card-header bg-info text-white">
+            <h4>Department Details</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Department ID</dt>
+                <dd class="col-sm-8">@Model.Id</dd>
+
+                <dt class="col-sm-4">Department Name</dt>
+                <dd class="col-sm-8">@Model.Name</dd>
+            </dl>
+            <div class="mt-3">
+                <a asp-action="FrontPage" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">
+                    <i class="bi bi-pencil-square"></i> Edit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+}

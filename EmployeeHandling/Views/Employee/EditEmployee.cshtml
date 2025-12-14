@@ -1,118 +1,47 @@
 ﻿@model EmployeeHandling.Dto.EmployeeModel.EditEmployeeDto
 
-@{
-    ViewData["Title"] = "Edit Employee";
-}
+<form asp-action="EditEmployee" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-sm rounded-lg">
-                <div class="card-header bg-warning text-dark">
-                    <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Edit Employee</h4>
-                </div>
-                <div class="card-body">
-                    <form asp-action="EditEmployee" method="post">
-                        <input type="hidden" asp-for="Id" />
+    <label asp-for="FirstName"></label>
+    <input asp-for="FirstName" class="form-control" />
+    <span asp-validation-for="FirstName" class="text-danger"></span>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label asp-for="FirstName" class="form-label"></label>
-                                <input asp-for="FirstName" class="form-control" />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
-                            </div>
+    <label asp-for="LastName"></label>
+    <input asp-for="LastName" class="form-control" />
+    <span asp-validation-for="LastName" class="text-danger"></span>
 
-                            <div class="col-md-6">
-                                <label asp-for="LastName" class="form-label"></label>
-                                <input asp-for="LastName" class="form-control" />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
-                            </div>
-                        </div>
+    <label asp-for="OtherName"></label>
+    <input asp-for="OtherName" class="form-control" />
+    <span asp-validation-for="OtherName" class="text-danger"></span>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label asp-for="OtherName" class="form-label"></label>
-                                <input asp-for="OtherName" class="form-control" />
-                                <span asp-validation-for="OtherName" class="text-danger"></span>
-                            </div>
+    <label asp-for="Gender"></label>
+    <select asp-for="Gender" class="form-select">
+        <option value="">-- Select Gender --</option>
+        <option value="Male" selected="@Model.Gender == " Male"">Male</option>
+        <option value="Female" selected="@Model.Gender == " Female"">Female</option>
+    </select>
+    <span asp-validation-for="Gender" class="text-danger"></span>
 
-                            <div class="col-md-6">
-                                <label asp-for="Gender" class="form-label"></label>
-                                <select asp-for="Gender" class="form-select">
-                                    <option value="">-- Select Gender --</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                </select>
-                                <span asp-validation-for="Gender" class="text-danger"></span>
-                            </div>
-                        </div>
+    <label asp-for="Email"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
 
+    <label asp-for="PhoneNumber"></label>
+    <input asp-for="PhoneNumber" class="form-control" />
+    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label asp-for="Email" class="form-label"></label>
-                                <input asp-for="Email" class="form-control" />
-                                <span asp-validation-for="Email" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6">
-                                <label asp-for="PhoneNumber" class="form-label"></label>
-                                <input asp-for="PhoneNumber" class="form-control" />
-                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                            </div>
-                        </div>
+    <label asp-for="Address"></label>
+    <input asp-for="Address" class="form-control" />
+    <span asp-validation-for="Address" class="text-danger"></span>
 
-                        <div class="mb-3">
-                            <label asp-for="Address" class="form-label"></label>
-                            <input asp-for="Address" class="form-control" />
-                            <span asp-validation-for="Address" class="text-danger"></span>
-                        </div>
+    <label asp-for="DepartmentId"></label>
+    <select asp-for="DepartmentId" class="form-select" asp-items="Model.Departments">
+        <option value="">-- Select Department --</option>
+    </select>
+    <span asp-validation-for="DepartmentId" class="text-danger"></span>
 
-                        <div class="mb-3">
-                            <label asp-for="DepartmentId" class="form-label"></label>
-                            <select asp-for="DepartmentId" class="form-select" asp-items="Model.Departments">
-                                <option value="">-- Select Department --</option>
-                            </select>
-                            <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                        </div>
-
-
-                        <div class="d-flex justify-content-between">
-                            <a class="btn btn-secondary" href="@Url.Action("RearPage", "Employee")">
-                                <i class="bi bi-arrow-left"></i> Back
-                            </a>
-                            <button type="submit" class="btn btn-warning text-dark">
-                                <i class="bi bi-check-circle"></i> Update
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<style>
-    .card {
-        border-radius: 12px;
-        transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-        .card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
-    .form-control {
-        border-radius: 8px;
-    }
-
-    .btn i {
-        margin-right: 4px;
-    }
-</style>
-
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <!-- Bootstrap icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
-}
+    <button type="submit" class="btn btn-warning">Update</button>
+    <a asp-action="RearPage" class="btn btn-secondary">Cancel</a>
+</form>

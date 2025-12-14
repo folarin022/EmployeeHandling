@@ -69,30 +69,93 @@ namespace EmployeeHandling.Controllers
                 dto.Departments = await _employeeService.GetDepartmentsForDropdown();
                 return View(dto);
             }
- 
+
             await _employeeService.AddEmployee(dto, cancellationToken);
             TempData.Success("Employee added successfully!");
             return RedirectToAction("RearPage");
         }
-        [HttpPost]
-        public async Task<IActionResult> EditEmployee(Guid id, EditEmployeeDto request, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<IActionResult> EditEmployee(Guid id, CancellationToken cancellationToken)
         {
+            if (id == Guid.Empty)
+                return NotFound();
+
+            var employee = await _employeeService.GetEmployeeById(id, cancellationToken);
+
+            if (employee == null)
+                return NotFound();
+
+            var dto = new EditEmployeeDto
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                OtherName = employee.OtherName,
+                Gender = employee.Gender,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Address = employee.Address,
+                DepartmentId = employee.DepartmentId,
+                Departments = await _employeeService.GetDepartmentsForDropdown() 
+            };
+
+            return View(dto);
+        }
 
 
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEmployee(EditEmployeeDto dto)
+        {
             if (!ModelState.IsValid)
-                return View(request);
+            {
+                dto.Departments = await _employeeService.GetDepartmentsForDropdown();
+                return View(dto);
+            }
 
-            var result = await _employeeService.UpdateEmployee(request.Id, request, cancellationToken);
-
+            var result = await _employeeService.UpdateEmployee(dto.Id, dto, CancellationToken.None);
             if (!result.IsSuccess)
             {
                 ModelState.AddModelError("", result.Message);
-                return View(request);
+                dto.Departments = await _employeeService.GetDepartmentsForDropdown();
+                return View(dto);
             }
 
-            TempData["ToastMessage"] = $"success|Employee updated successfully!";
+            TempData["ToastMessage" ] = $"success|Employee updated successfully!";
             return RedirectToAction("RearPage");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EmployeeDetails(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == Guid.Empty)
+                return NotFound();
+
+            var employee = await _employeeService.GetEmployeeById(id, cancellationToken);
+
+            if (employee == null)
+                return NotFound();
+
+            var dto = new EmployeeResponseDto
+            {
+                Id = employee.Id,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                OtherName = employee.OtherName,
+                Gender = employee.Gender,
+                Email = employee.Email,
+                PhoneNumber = employee.PhoneNumber,
+                Address = employee.Address,
+                Department = employee.Department?.Name 
+            };
+
+            return View(dto);
+        }
+
+
+
 
 
         [HttpPost]

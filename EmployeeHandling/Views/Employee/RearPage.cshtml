@@ -43,13 +43,17 @@
                                     <td class="text-center">
                                         <div class="d-flex justify-content-center gap-1">
 
-                                            <a class="btn btn-sm btn-info text-white" asp-action="DetailsEmployee" asp-route-id="@emp.Id" title="View Details">
+                                            <a class="btn btn-sm btn-info text-white" asp-action="EmployeeDetails" asp-route-id="@emp.Id" title="View Details">
                                                 <i class="bi bi-eye"></i>
                                             </a>
 
-                                            <a class="btn btn-sm btn-warning me-1" href="@Url.Action("EditEmployee", "Employee", new { id = emp.Id })">
-                                                <i class="bi bi-pencil-square"></i> Edit
+                                            <a asp-action="EditEmployee"
+                                               asp-controller="Employee"
+                                               asp-route-id="@emp.Id"
+                                               class="btn btn-warning btn-sm">
+                                                Edit
                                             </a>
+
 
                                             <form asp-action="DeleteEmployee" asp-controller="Employee" method="post" style="display:inline;">
                                                 <input type="hidden" name="id" value="@emp.Id" />

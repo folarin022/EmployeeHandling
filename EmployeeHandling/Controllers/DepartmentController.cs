@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using EmployeeHandling.Dto;
-using EmployeeHandling.Dto.DepartmentModel;
+﻿using EmployeeHandling.Dto.DepartmentModel;
 using EmployeeHandling.Service.Interface;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeHandling.Controllers
 {
@@ -64,24 +63,46 @@ namespace EmployeeHandling.Controllers
             return RedirectToAction("FrontPage");
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditDepartmentDto dto, CancellationToken cancellationToken)
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id,CancellationToken cancellationToken)
         {
-            if (!ModelState.IsValid)
-                return View(dto);
+            if (id == Guid.Empty)
+                return NotFound();
 
-            var result = await _departmentService.UpdateDepartment(dto.Id, dto, cancellationToken);
+            var response = await _departmentService.GetDepartmentById(id,cancellationToken);
 
-            if (!result.IsSuccess)
+            if (!response.IsSuccess || response.Data == null)
+                return NotFound();
+
+            var dto = new EditDepartmentDto
             {
-                ModelState.AddModelError("", result.Message);
-                return View(dto);
-            }
+                Id = response.Data.Id,
+                Name = response.Data.Name
+            };
 
-            TempData["ToastMessage"] = $"success|Department updated successfully!";
-            return RedirectToAction("FrontPage");
+            return View(dto);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
+        {
+            if (id == Guid.Empty)
+                return NotFound();
+
+            var response = await _departmentService.GetDepartmentById(id, cancellationToken);
+
+            if (!response.IsSuccess || response.Data == null)
+                return NotFound();
+
+            var dto = new DepartmentDto
+            {
+                Id = response.Data.Id,
+                Name = response.Data.Name
+            };
+
+            return View(dto); 
+        }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -31,6 +31,10 @@
                             <th scope="row">@counter</th>
                             <td>@dept.Name</td>
                             <td class="text-center">
+
+                                <a class="btn btn-sm btn-info text-white" asp-action="Details" asp-route-id="@dept.Id" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
                                 <a class="btn btn-sm btn-warning me-1" href="@Url.Action("Edit", "Department", new { id = dept.Id })">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>

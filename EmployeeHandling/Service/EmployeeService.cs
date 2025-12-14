@@ -159,107 +159,34 @@ namespace EmployeeHandling.Service
                 .ToListAsync();
         }
 
-        public async Task<BaseResponse<EmployeeResponseDto>> GetEmployeeById(Guid id, CancellationToken cancellationToken)
+        public async Task<Employee?> GetEmployeeById(Guid id, CancellationToken cancellationToken)
         {
-            var response = new BaseResponse<EmployeeResponseDto>();
-            _logger.LogInformation("Fetching employee with ID: {EmployeeId}", id);
-
-            try
-            {
-                var employee = await _employeeRepository.GetEmployeeById(id, cancellationToken);
-
-                if (employee == null)
-                {
-                    _logger.LogWarning("Employee not found with ID: {EmployeeId}", id);
-                    response.IsSuccess = false;
-                    response.Message = "Employee not found";
-                    return response;
-                }
-
-                response.IsSuccess = true;
-                response.Data = new EmployeeResponseDto
-                {
-                    Id = employee.Id,
-                    FirstName = employee.FirstName,
-                    LastName = employee.LastName,
-                    Email = employee.Email,
-                    PhoneNumber = employee.PhoneNumber,
-                    Address = employee.Address,
-                    Department = employee.Department.Name
-                };
-                response.Message = "Employee retrieved successfully";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error fetching employee with ID: {EmployeeId}", id);
-                response.IsSuccess = false;
-                response.Data = null;
-                response.Message = $"Error retrieving Employee: {ex.Message}";
-            }
-
-            return response;
+            return await _dbContext.Employees
+            .Include(e => e.Department) 
+            .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         }
 
-        public async Task<BaseResponse<bool>> UpdateEmployee(Guid Id,EditEmployeeDto request, CancellationToken cancellationToken)
+        public async Task<BaseResponse<bool>> UpdateEmployee(Guid id, EditEmployeeDto request, CancellationToken cancellationToken)
         {
-            var response = new BaseResponse<bool>();
+            var employee = await _dbContext.Employees.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
-            try
-            {
-                var employee = await _dbContext.Employees
-                    .FirstOrDefaultAsync(e => e.Id == Id, cancellationToken);
+            if (employee == null)
+                return new BaseResponse<bool> { IsSuccess = false, Message = "Employee not found" };
 
-                if (employee == null)
-                {
-                    _logger.LogWarning("Employee not found with ID: {EmployeeId}", Id);
-                    response.IsSuccess = false;
-                    response.Message = "Employee not found";
-                    response.Data = false;
-                    return response;
-                }
+            employee.FirstName = request.FirstName;
+            employee.LastName = request.LastName;
+            employee.OtherName = request.OtherName;
+            employee.Gender = request.Gender;
+            employee.Email = request.Email;
+            employee.PhoneNumber = request.PhoneNumber;
+            employee.Address = request.Address;
+            employee.DepartmentId = request.DepartmentId;
 
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
-
-                var department = await _dbContext.Departments
-                    .FirstOrDefaultAsync(d => d.Id == request.DepartmentId, cancellationToken);
-
-                if (department == null)
-                {
-                    _logger.LogWarning("Department not found with ID: {DepartmentId}", request.DepartmentId);
-                    response.IsSuccess = false;
-                    response.Message = "Department not found";
-                    response.Data = false;
-                    return response;
-                }
-
-
-
-                employee.FirstName = request.FirstName;
-                employee.LastName = request.LastName;
-                employee.OtherName = request.OtherName;
-                employee.Gender = request.Gender;
-                employee.Email = request.Email;
-                employee.Address = request.Address;
-                employee.PhoneNumber = request.PhoneNumber;
-                employee.DepartmentId = request.DepartmentId;
-
-                await _dbContext.SaveChangesAsync(cancellationToken);
-
-                _logger.LogInformation("Employee updated successfully with ID: {EmployeeId}", Id);
-                response.IsSuccess = true;
-                response.Data = true;
-                response.Message = "Employee updated successfully";
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating employee with ID: {EmployeeId}", Id);
-                response.IsSuccess = false;
-                response.Data = false;
-                response.Message = $"Error updating employee: {ex.InnerException?.Message ?? ex.Message}";
-            }
-
-            return response;
+            return new BaseResponse<bool> { IsSuccess = true };
         }
+
 
     }
 }
