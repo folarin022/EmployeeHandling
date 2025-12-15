@@ -5,106 +5,140 @@
 }
 
 <div class="container mt-5">
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <h3 class="mb-0">Add New Employee</h3>
-        </div>
-        <div class="card-body">
-            <form asp-action="CreateEmployee" asp-controller="Employee" method="post">
-                @Html.AntiForgeryToken()
-
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label asp-for="FirstName" class="form-label"></label>
-                        <input asp-for="FirstName" class="form-control" />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label asp-for="LastName" class="form-label"></label>
-                        <input asp-for="LastName" class="form-control" />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg rounded-5 border-0">
+                <!-- Gradient Header -->
+                <div class="card-header bg-gradient-primary text-white text-center py-4 rounded-top-5">
+                    <h3 class="mb-0"><i class="bi bi-person-plus me-2"></i> Add New Employee</h3>
                 </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label asp-for="OtherName" class="form-label"></label>
-                        <input asp-for="OtherName" class="form-control" />
-                        <span asp-validation-for="OtherName" class="text-danger"></span>
-                    </div>
+                <!-- Card Body -->
+                <div class="card-body p-5">
+                    <form asp-action="CreateEmployee" asp-controller="Employee" method="post">
+                        @Html.AntiForgeryToken()
 
-                    <div class="col-md-6">
-                        <label asp-for="Gender" class="form-label"></label>
-                        <select asp-for="Gender" class="form-select">
-                            <option value="">-- Select Gender --</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                        </select>
-                        <span asp-validation-for="Gender" class="text-danger"></span>
-                    </div>
+                        <div class="row g-4">
+                            <!-- First & Last Name -->
+                            <div class="col-md-6 form-floating">
+                                <input asp-for="FirstName" class="form-control form-control-lg" />
+                                <label asp-for="FirstName" class="fw-semibold">First Name</label>
+                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 form-floating">
+                                <input asp-for="LastName" class="form-control form-control-lg" />
+                                <label asp-for="LastName" class="fw-semibold">Last Name</label>
+                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Other Name & Gender -->
+                            <div class="col-md-6 form-floating">
+                                <input asp-for="OtherName" class="form-control form-control-lg" />
+                                <label asp-for="OtherName" class="fw-semibold">Other Name</label>
+                                <span asp-validation-for="OtherName" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 form-floating">
+                                <select asp-for="Gender" class="form-select form-select-lg">
+                                    <option value="">-- Select Gender --</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                </select>
+                                <label asp-for="Gender" class="fw-semibold">Gender</label>
+                                <span asp-validation-for="Gender" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Email & Phone -->
+                            <div class="col-md-6 form-floating">
+                                <input asp-for="Email" class="form-control form-control-lg" />
+                                <label asp-for="Email" class="fw-semibold">Email</label>
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 form-floating">
+                                <input asp-for="PhoneNumber" class="form-control form-control-lg" />
+                                <label asp-for="PhoneNumber" class="fw-semibold">Phone Number</label>
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="col-12 form-floating">
+                                <input asp-for="Address" class="form-control form-control-lg" />
+                                <label asp-for="Address" class="fw-semibold">Address</label>
+                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            </div>
+
+                            <!-- Department -->
+                            <div class="col-12 form-floating">
+                                <select asp-for="DepartmentId" class="form-select form-select-lg" asp-items="Model.Departments">
+                                    <option value="">-- Select Department --</option>
+                                </select>
+                                <label asp-for="DepartmentId" class="fw-semibold">Department</label>
+                                <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-between mt-5">
+                            <a class="btn btn-outline-secondary btn-lg shadow-sm" href="@Url.Action("RearPage", "Employee")">
+                                <i class="bi bi-arrow-left me-1"></i> Back
+                            </a>
+
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm">
+                                <i class="bi bi-plus-circle me-1"></i> Add Employee
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label asp-for="Email" class="form-label"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-                    <div class="col-md-6">
-                        <label asp-for="PhoneNumber" class="form-label"></label>
-                        <input asp-for="PhoneNumber" class="form-control" />
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="Address" class="form-label"></label>
-                    <input asp-for="Address" class="form-control" />
-                    <span asp-validation-for="Address" class="text-danger"></span>
-                </div>
-
-                <div class="mb-3">
-                    <label asp-for="DepartmentId" class="form-label"></label>
-                    <select asp-for="DepartmentId" class="form-select" asp-items="Model.Departments">
-                        <option value="">-- Select Department --</option>
-                    </select>
-                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <a class="btn btn-secondary" href="@Url.Action("RearPage", "Employee")">
-                        <i class="bi bi-arrow-left"></i> Back
-                    </a>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="bi bi-plus-circle"></i> Add Employee
-                    </button>
-
-                </div>
-
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-}
-
+<!-- Styles -->
 <style>
-    .card {
-        border-radius: 12px;
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #4e73df, #224abe);
     }
 
-    .form-control {
-        border-radius: 6px;
+    .card {
+        border-radius: 2rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+    .form-control, .form-select {
+        border-radius: 1rem;
+        padding: 1rem;
+    }
+
+    .form-floating > label {
+        color: #495057;
     }
 
     .btn i {
-        margin-right: 4px;
+        vertical-align: middle;
     }
+
+    /* Responsive padding fix */
+    <text >
+    @@media (max-width: 768px) {
+        .card-body
+
+    {
+        padding: 2rem;
+    }
+
+    }
+    </text >
 </style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+}
