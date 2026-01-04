@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement.Repository
 {
-    public class DepartmentRepository : IDepartmentRepository
+    public class DepartmentRepository(ApplicationDbContext _dbContext) : IDepartmentRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-
-        public DepartmentRepository(ApplicationDbContext dbContext)
-        {
-            _dbContext = dbContext;
-        }
+       
 
         public async Task<bool> AddDepartment(AddDepartmentDto dto, CancellationToken cancellationToken)
         {

@@ -1,30 +1,71 @@
 ﻿@model IEnumerable<EmployeeHandling.Dto.EmployeeModel.EmployeeResponseDto>
 
 @{
-    ViewData["Title"] = "Employee List";
+    ViewData["Title"] = "Employees";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-primary">Employees</h2>
-        <a class="btn btn-success" href="@Url.Action("CreateEmployee", "Employee")">
-            <i class="bi bi-plus-circle"></i> Create Employee
-        </a>
+<div class="container-fluid px-4 py-4">
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold text-gradient mb-1">Employee Directory</h2>
+                <p class="text-muted mb-0">Centralized record of all employees in the organization</p>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="stat-card bg-primary bg-opacity-10 px-3 py-2 rounded-3">
+                    <small class="text-muted d-block">Total Employees</small>
+                    <span class="fs-5 fw-bold">@Model.Count()</span>
+                </div>
+                <a class="btn btn-primary d-flex align-items-center gap-2 shadow-sm hover-lift"
+                   href="@Url.Action("CreateEmployee", "Employee")">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <span>New Employee</span>
+                </a>
+            </div>
+        </div>
     </div>
 
-    <div class="card shadow-lg rounded">
+    <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-transparent border-bottom py-3">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-text bg-light border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" class="form-control border-0 bg-light" id="searchInput" placeholder="Search employees...">
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table class="table table-hover align-middle mb-0 bg-white">
-                    <thead class="table-dark sticky-top">
+                <table class="table table-hover align-middle mb-0" id="employeeTable">
+                    <thead class="bg-light bg-opacity-50 border-bottom">
                         <tr>
-                            <th scope="col" style="width: 50px;">S/N</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Last Name</th>
-                            <th scope="col">OtherName</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Department</th>
-                            <th scope="col" class="text-center" style="width: 200px;">Actions</th>
+                            <th class="ps-4 fw-semibold text-uppercase text-muted" style="width:80px;">
+                               S/N 
+                            </th>
+                            <th class="fw-semibold text-uppercase text-muted">
+                                <i class="bi bi-person me-1"></i>First Name
+                            </th>
+                            <th class="fw-semibold text-uppercase text-muted">
+                                Last Name
+                            </th>
+                            <th class="fw-semibold text-uppercase text-muted">
+                                Other Name
+                            </th>
+                            <th class="fw-semibold text-uppercase text-muted">
+                                <i class="bi bi-gender-ambiguous me-1"></i>Gender
+                            </th>
+                            <th class="fw-semibold text-uppercase text-muted">
+                                <i class="bi bi-building me-1"></i>Department
+                            </th>
+                            <th class="text-end pe-4 fw-semibold text-uppercase text-muted" style="width:180px;">
+                                Actions
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,31 +74,64 @@
                             int counter = 1;
                             foreach (var emp in Model)
                             {
-                                <tr class="table-row-hover">
-                                    <th scope="row">@counter</th>
-                                    <td>@emp.FirstName</td>
-                                    <td>@emp.LastName</td>
-                                    <td>@emp.OtherName</td>
-                                    <td>@emp.Gender</td>
-                                    <td>@emp.Department</td>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center gap-1">
-
-                                            <a class="btn btn-sm btn-info text-white" asp-action="EmployeeDetails" asp-route-id="@emp.Id" title="View Details">
+                                <tr class="employee-row" data-gender="@emp.Gender?.ToLower()" data-name="@emp.FirstName?.ToLower() @emp.LastName?.ToLower() @emp.OtherName?.ToLower()">
+                                    <td class="ps-4">
+                                        <div class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-medium">
+                                            @counter
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle @GetGenderColor(emp.Gender) rounded-circle me-3 d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                                                <i class="bi bi-person"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">@emp.FirstName</h6>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-medium">@emp.LastName</span>
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">@emp.OtherName</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @GetGenderBadgeClass(emp.Gender) rounded-pill px-3 py-2">
+                                            @emp.Gender
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="dept-badge bg-primary bg-opacity-10 text-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width:30px; height:30px;">
+                                                <i class="bi bi-building small"></i>
+                                            </div>
+                                            <span class="fw-medium">@emp.Department</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="EmployeeDetails"
+                                               asp-route-id="@emp.Id"
+                                               class="btn btn-sm btn-outline-info rounded-start-2"
+                                               data-bs-toggle="tooltip"
+                                               title="View Details">
                                                 <i class="bi bi-eye"></i>
                                             </a>
-
                                             <a asp-action="EditEmployee"
-                                               asp-controller="Employee"
                                                asp-route-id="@emp.Id"
-                                               class="btn btn-warning btn-sm">
-                                                Edit
+                                               class="btn btn-sm btn-outline-primary"
+                                               data-bs-toggle="tooltip"
+                                               title="Edit Employee">
+                                                <i class="bi bi-pencil"></i>
                                             </a>
-
-
-                                            <form asp-action="DeleteEmployee" asp-controller="Employee" method="post" style="display:inline;">
+                                            <form asp-action="DeleteEmployee" method="post" class="d-inline">
                                                 <input type="hidden" name="id" value="@emp.Id" />
-                                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');" title="Delete Employee">
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger rounded-end-2"
+                                                        data-bs-toggle="tooltip"
+                                                        title="Delete Employee"
+                                                        onclick="return confirm('Are you sure you want to delete @emp.FirstName @emp.LastName?');">
                                                     <i class="bi bi-trash"></i>
                                                 </button>
                                             </form>
@@ -70,9 +144,15 @@
                         else
                         {
                             <tr>
-                                <td colspan="8" class="text-center py-4 text-muted">
-                                    <i class="bi bi-info-circle fs-4 d-block mb-1"></i>
-                                    No employees found in the system.
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-people text-muted" style="font-size: 3rem;"></i>
+                                        <h5 class="mt-3 text-muted">No employees found</h5>
+                                        <p class="text-muted mb-4">Get started by adding your first employee</p>
+                                        <a class="btn btn-primary" href="@Url.Action("CreateEmployee", "Employee")">
+                                            <i class="bi bi-plus-circle me-1"></i> Add Employee
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -80,24 +160,207 @@
                 </table>
             </div>
         </div>
+
+        
     </div>
 </div>
 
 <style>
-    .table-hover tbody tr.table-row-hover:hover {
-        background-color: #f1f7ff;
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4e73df 100%);
+        --shadow-color: rgba(102, 126, 234, 0.1);
+    }
+
+    .text-gradient {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.08);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08) !important;
+    }
+
+    .avatar-circle {
+        transition: all 0.3s ease;
+    }
+
+    .employee-row:hover .avatar-circle {
+        transform: scale(1.1);
+    }
+
+    .btn-group .btn {
+        border-radius: 6px !important;
+        margin: 0 2px;
+    }
+
+        .btn-group .btn:first-child {
+            border-top-left-radius: 20px !important;
+            border-bottom-left-radius: 20px !important;
+        }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 20px !important;
+            border-bottom-right-radius: 20px !important;
+        }
+
+    .table tbody tr {
+        transition: all 0.3s ease;
         cursor: pointer;
     }
 
-    .btn i {
-        margin-right: 0;
+        .table tbody tr:hover {
+            background-color: rgba(78, 115, 223, 0.02);
+            transform: translateX(4px);
+        }
+
+    .badge {
+        font-weight: 500;
+        letter-spacing: 0.3px;
     }
 
-    .container {
-        max-width: 1100px;
+    .input-group:focus-within {
+        box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+        border-radius: 8px;
+    }
+
+    .input-group-text {
+        border-radius: 8px 0 0 8px !important;
+    }
+
+    .stat-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            background-color: rgba(78, 115, 223, 0.1) !important;
+        }
+
+    .dept-badge {
+        font-size: 0.75rem;
     }
 </style>
 
+@functions {
+    private string GetGenderColor(string gender)
+    {
+        return gender?.ToLower() switch
+        {
+            "male" => "bg-info bg-opacity-10 text-info",
+            "female" => "bg-warning bg-opacity-10 text-warning",
+            _ => "bg-secondary bg-opacity-10 text-secondary"
+        };
+    }
+
+    private string GetGenderBadgeClass(string gender)
+    {
+        return gender?.ToLower() switch
+        {
+            "male" => "bg-info bg-opacity-10 text-info",
+            "female" => "bg-warning bg-opacity-10 text-warning",
+            _ => "bg-secondary bg-opacity-10 text-secondary"
+        };
+    }
+}
+
 @section Scripts {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+
+            const searchInput = document.getElementById('searchInput');
+            const allViewBtn = document.getElementById('allView');
+            const maleViewBtn = document.getElementById('maleView');
+            const femaleViewBtn = document.getElementById('femaleView');
+            const visibleCount = document.getElementById('visibleCount');
+            const employeeRows = document.querySelectorAll('.employee-row');
+
+            let currentFilter = 'all';
+
+            function updateVisibleCount() {
+                const visibleRows = document.querySelectorAll('.employee-row:not([style*="display: none"])');
+                visibleCount.textContent = visibleRows.length;
+            }
+
+            function filterRows() {
+                let visible = 0;
+                employeeRows.forEach(row => {
+                    const rowGender = row.getAttribute('data-gender');
+                    const rowName = row.getAttribute('data-name');
+                    const searchTerm = searchInput.value.toLowerCase();
+
+                    let showRow = true;
+
+                    if (currentFilter !== 'all' && rowGender !== currentFilter) {
+                        showRow = false;
+                    }
+
+                    if (searchTerm && !rowName.includes(searchTerm)) {
+                        showRow = false;
+                    }
+
+                    if (showRow) {
+                        row.style.display = '';
+                        visible++;
+                        row.classList.add('animate__animated', 'animate__fadeIn');
+                        setTimeout(() => {
+                            row.classList.remove('animate__animated', 'animate__fadeIn');
+                        }, 500);
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                updateVisibleCount();
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', filterRows);
+            }
+
+            allViewBtn.addEventListener('click', function() {
+                allViewBtn.classList.add('active');
+                maleViewBtn.classList.remove('active');
+                femaleViewBtn.classList.remove('active');
+                currentFilter = 'all';
+                filterRows();
+            });
+
+            maleViewBtn.addEventListener('click', function() {
+                allViewBtn.classList.remove('active');
+                maleViewBtn.classList.add('active');
+                femaleViewBtn.classList.remove('active');
+                currentFilter = 'male';
+                filterRows();
+            });
+
+            femaleViewBtn.addEventListener('click', function() {
+                allViewBtn.classList.remove('active');
+                maleViewBtn.classList.remove('active');
+                femaleViewBtn.classList.add('active');
+                currentFilter = 'female';
+                filterRows();
+            });
+
+            employeeRows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
+                row.classList.add('animate__animated', 'animate__fadeIn');
+            });
+
+            updateVisibleCount();
+        });
+    </script>
 }

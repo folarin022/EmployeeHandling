@@ -4,84 +4,332 @@
     ViewData["Title"] = "Departments";
 }
 
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary">Departments</h2>
-        <a class="btn btn-success" href="@Url.Action("Create", "Department")">
-            <i class="bi bi-plus-circle"></i> Create Department
-        </a>
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold text-gradient">Departments</h2>
+                    <p class="text-muted mb-0">Manage all departments in your organization</p>
+                </div>
+                <div class="d-flex align-items-center gap-3">
+                    <div class="stat-card bg-primary bg-opacity-10 px-3 py-2 rounded-3">
+                        <small class="text-muted d-block">Total Departments</small>
+                        <span class="fs-5 fw-bold">@Model.Count()</span>
+                    </div>
+                    <a class="btn btn-primary d-flex align-items-center gap-2 shadow-sm" href="@Url.Action("Create", "Department")">
+                        <i class="bi bi-plus-circle-fill"></i>
+                        <span>New Department</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-hover align-middle mb-0 bg-white">
-            <thead class="table-dark">
-                <tr>
-                    <th scope="col">S/N</th>
-                    <th scope="col">Department Name</th>
-                    <th scope="col" class="text-center">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
+    
+
+        <div class="card-body p-0" id="tableView">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0" id="deptTable">
+                    <thead class="bg-light bg-opacity-50 border-bottom">
+                        <tr>
+                            <th scope="col" class="ps-4 fw-semibold text-uppercase text-muted" style="width:80px;">
+                                <i class="bi bi-hash me-1"></i>S/N
+                            </th>
+                            <th scope="col" class="fw-semibold text-uppercase text-muted">
+                                <i class="bi bi-building me-1"></i>Department
+                            </th>
+                            <th scope="col" class="text-end pe-4 fw-semibold text-uppercase text-muted" style="width:180px;">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            int counter = 1;
+                            foreach (var dept in Model)
+                            {
+                                <tr class="dept-row" data-name="@dept.Name.ToLower()">
+                                    <td class="ps-4">
+                                        <div class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 fw-medium">
+                                            #@counter
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle bg-primary bg-opacity-10 text-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width:40px; height:40px;">
+                                                <i class="bi bi-building"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0 fw-semibold">@dept.Name</h6>
+                                                <small class="text-muted">@dept.Id</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end pe-4">
+                                        <div class="btn-group" role="group">
+                                            <a class="btn btn-sm btn-outline-info rounded-start-2" asp-action="Details" asp-route-id="@dept.Id" data-bs-toggle="tooltip" title="View Details">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", "Department", new { id = dept.Id })" data-bs-toggle="tooltip" title="Edit Department">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger rounded-end-2 delete-btn" data-id="@dept.Id" data-name="@dept.Name" data-bs-toggle="tooltip" title="Delete Department">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="3" class="text-center py-5">
+                                    <div class="py-4">
+                                        <i class="bi bi-building text-muted" style="font-size: 3rem;"></i>
+                                        <h5 class="mt-3 text-muted">No departments found</h5>
+                                        <p class="text-muted mb-4">Get started by creating your first department</p>
+                                        <a class="btn btn-primary" href="@Url.Action("Create", "Department")">
+                                            <i class="bi bi-plus-circle me-1"></i> Create Department
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-body p-4 d-none" id="gridView">
+            <div class="row g-3" id="deptGrid">
                 @if (Model != null && Model.Any())
                 {
                     int counter = 1;
                     foreach (var dept in Model)
                     {
-                        <tr>
-                            <th scope="row">@counter</th>
-                            <td>@dept.Name</td>
-                            <td class="text-center">
-
-                                <a class="btn btn-sm btn-info text-white" asp-action="Details" asp-route-id="@dept.Id" title="View Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a class="btn btn-sm btn-warning me-1" href="@Url.Action("Edit", "Department", new { id = dept.Id })">
-                                    <i class="bi bi-pencil-square"></i> Edit
-                                </a>
-
-                                <form asp-action="Delete" asp-controller="Department" method="post" style="display:inline;"
-                                      onsubmit="return confirmDelete('@dept.Name')">
-                                    @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@dept.Id" />
-                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
-                                </form>
-                            </td>
-                        </tr>
+                        <div class="col-md-6 col-lg-4 dept-card" data-name="@dept.Name.ToLower()">
+                            <div class="card border-0 shadow-sm h-100 hover-lift">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-start mb-3">
+                                        <div class="avatar-circle bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style="width:48px; height:48px;">
+                                            <i class="bi bi-building fs-5"></i>
+                                        </div>
+                                        <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill">#@counter</span>
+                                    </div>
+                                    <h5 class="card-title fw-semibold mb-2">@dept.Name</h5>
+                                    <p class="text-muted small mb-4">Department ID: @dept.Id</p>
+                                    <div class="d-flex justify-content-between pt-3 border-top">
+                                        <a class="btn btn-sm btn-outline-info" asp-action="Details" asp-route-id="@dept.Id" data-bs-toggle="tooltip" title="View">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a class="btn btn-sm btn-outline-primary" href="@Url.Action("Edit", "Department", new { id = dept.Id })" data-bs-toggle="tooltip" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger delete-btn" data-id="@dept.Id" data-name="@dept.Name" data-bs-toggle="tooltip" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         counter++;
                     }
                 }
-                else
-                {
-                    <tr>
-                        <td colspan="3" class="text-center text-muted">No departments found.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <div class="avatar-circle bg-danger bg-opacity-10 text-danger rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px; height:48px;">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </div>
+                <h5 class="modal-title">Delete Department</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-4">
+                <p>Are you sure you want to delete <strong id="deptNameToDelete"></strong>?</p>
+                <p class="text-muted small mb-0">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="deptIdToDelete" name="id" />
+                    <button type="submit" class="btn btn-danger">Delete Department</button>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
 
 <style>
-    .table-hover tbody tr:hover {
-        background-color: #f1f7ff;
+    :root {
+        --primary-color: #4e73df;
+        --primary-light: rgba(78, 115, 223, 0.1);
+        --success-color: #1cc88a;
+        --danger-color: #e74a3b;
+        --info-color: #36b9cc;
+        --transition: all 0.3s ease;
     }
 
-    .btn i {
-        margin-right: 4px;
+    .text-gradient {
+        background: linear-gradient(45deg, var(--primary-color), #36b9cc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
-    .container {
-        max-width: 900px;
+    .card {
+        transition: var(--transition);
+        border: 1px solid rgba(0,0,0,0.08);
     }
+
+    .hover-lift:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.08) !important;
+    }
+
+    .avatar-circle {
+        transition: var(--transition);
+    }
+
+    .dept-row:hover .avatar-circle {
+        transform: scale(1.1);
+        background-color: var(--primary-light);
+    }
+
+    .btn-group .btn {
+        border-radius: 6px !important;
+        margin: 0 2px;
+    }
+
+        .btn-group .btn:first-child {
+            border-top-left-radius: 20px !important;
+            border-bottom-left-radius: 20px !important;
+        }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 20px !important;
+            border-bottom-right-radius: 20px !important;
+        }
+
+    .table tbody tr {
+        transition: var(--transition);
+        cursor: pointer;
+    }
+
+        .table tbody tr:hover {
+            background-color: rgba(78, 115, 223, 0.02);
+            transform: translateX(4px);
+        }
+
+    .badge {
+        font-weight: 500;
+        letter-spacing: 0.3px;
+    }
+
+    .input-group:focus-within {
+        box-shadow: 0 0 0 3px rgba(78, 115, 223, 0.1);
+        border-radius: 8px;
+    }
+
+    .input-group-text {
+        border-radius: 8px 0 0 8px !important;
+    }
+
+    .stat-card {
+        transition: var(--transition);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            background-color: var(--primary-light) !important;
+        }
 </style>
 
 @section Scripts {
-    <!-- Bootstrap icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
     <script>
-        function confirmDelete(departmentName) {
-            return confirm(`Are you sure you want to delete the department "${departmentName}"?`);
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
+            const tooltips = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+            tooltips.forEach(tooltip => new bootstrap.Tooltip(tooltip));
+
+            // Search functionality
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) {
+                searchInput.addEventListener('input', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const rows = document.querySelectorAll('.dept-row');
+                    const cards = document.querySelectorAll('.dept-card');
+
+                    rows.forEach(row => {
+                        const deptName = row.getAttribute('data-name');
+                        row.style.display = deptName.includes(searchTerm) ? '' : 'none';
+                    });
+
+                    cards.forEach(card => {
+                        const deptName = card.getAttribute('data-name');
+                        card.style.display = deptName.includes(searchTerm) ? '' : 'none';
+                    });
+                });
+            }
+
+            // View toggle
+            const viewToggles = document.querySelectorAll('.view-toggle');
+            const tableView = document.getElementById('tableView');
+            const gridView = document.getElementById('gridView');
+
+            viewToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    viewToggles.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    if (this.dataset.view === 'table') {
+                        tableView.classList.remove('d-none');
+                        gridView.classList.add('d-none');
+                    } else {
+                        tableView.classList.add('d-none');
+                        gridView.classList.remove('d-none');
+                    }
+                });
+            });
+
+            const deleteBtns = document.querySelectorAll('.delete-btn');
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+            const deptNameSpan = document.getElementById('deptNameToDelete');
+            const deptIdInput = document.getElementById('deptIdToDelete');
+            const deleteForm = document.getElementById('deleteForm');
+
+            deleteBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const deptId = this.getAttribute('data-id');
+                    const deptName = this.getAttribute('data-name');
+
+                    deptNameSpan.textContent = deptName;
+                    deptIdInput.value = deptId;
+                    deleteForm.action = '@Url.Action("Delete", "Department")';
+
+                    deleteModal.show();
+                });
+            });
+
+            const rows = document.querySelectorAll('.dept-row');
+            rows.forEach((row, index) => {
+                row.style.animationDelay = `${index * 0.05}s`;
+                row.classList.add('animate__animated', 'animate__fadeIn');
+            });
+        });
     </script>
 }

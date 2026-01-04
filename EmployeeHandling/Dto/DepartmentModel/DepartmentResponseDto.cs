@@ -1,5 +1,4 @@
 ﻿using EmployeeHandling.Dto.EmployeeModel;
-using EmployeeManagement.Dto.EmployeeModel;
 
 namespace EmployeeHandling.Dto.DepartmentModel
 {

@@ -4,33 +4,85 @@
     ViewData["Title"] = "Edit Department";
 }
 
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow-lg rounded-3 border-0 overflow-hidden">
-                <div class="card-header text-white text-center p-3" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);">
-                    <h4 class="mb-0"><i class="bi bi-pencil-square"></i> Edit Department</h4>
+        <div class="col-xl-8 col-lg-10">
+            <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                <div class="d-inline-block p-3 mb-3 rounded-circle" style="background: linear-gradient(135deg, #f6d36520, #fda08520);">
+                    <i class="bi bi-pencil-square text-gradient fs-1"></i>
                 </div>
-                <div class="card-body p-4">
-                    <form asp-action="Edit" method="post">
+                <h1 class="fw-bold text-gradient display-6 mb-2">Edit Department</h1>
+                <p class="text-muted lead">Update department information in the system</p>
+            </div>
+
+            <div class="card border-0 shadow-3d rounded-4 overflow-hidden animate__animated animate__fadeInUp">
+                <div class="card-header text-white position-relative overflow-hidden py-4 px-5" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 50%, #f6d365 100%);">
+                    <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10">
+                        <div class="pattern-dots" style="transform: rotate(45deg);"></div>
+                    </div>
+                    <div class="position-relative z-2">
+                        <h4 class="mb-0 fw-bold"><i class="bi bi-building me-2"></i> Edit Department Information</h4>
+                        <small class="opacity-75">Update the department name as needed</small>
+                    </div>
+                </div>
+
+                <div class="card-body p-5">
+                    <form asp-action="Edit" method="post" id="editForm">
                         @Html.AntiForgeryToken()
                         <input type="hidden" asp-for="Id" />
 
-                        <div class="mb-4">
-                            <label asp-for="Name" class="form-label fw-semibold"></label>
-                            <input asp-for="Name" class="form-control form-control-lg shadow-sm" />
-                            <span asp-validation-for="Name" class="text-danger small"></span>
+                        <div class="form-group floating-label-group mb-4">
+                            <input asp-for="Name" class="form-control form-control-lg shadow-sm floating-input"
+                                   placeholder=" " value="@Model.Name" id="departmentName" />
+                            <label asp-for="Name" class="floating-label">
+                                <i class="bi bi-building me-2"></i>Department Name
+                            </label>
+                            <div class="form-text">Enter the new name for the department</div>
+                            <span asp-validation-for="Name" class="text-danger validation-message"></span>
+                            <div class="input-feedback"></div>
                         </div>
 
-                        <div class="d-flex justify-content-between align-items-center">
-                            <a class="btn btn-outline-secondary btn-lg" href="@Url.Action("FrontPage", "Department")">
-                                <i class="bi bi-arrow-left"></i> Back
+                        <div class="d-flex justify-content-end mb-4">
+                            <small class="text-muted">
+                                <span id="charCount">@(Model.Name?.Length ?? 0)</span>/50 characters
+                            </small>
+                        </div>
+
+                        <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+                            <a class="btn btn-outline-secondary btn-lg px-4 rounded-pill shadow-sm hover-lift"
+                               href="@Url.Action("FrontPage", "Department")">
+                                <i class="bi bi-arrow-left me-2"></i> Back to List
                             </a>
-                            <button type="submit" class="btn btn-gradient btn-lg text-white">
-                                <i class="bi bi-check-circle"></i> Update
-                            </button>
+
+                            <div class="btn-group" role="group">
+                                <button type="reset" class="btn btn-light btn-lg px-4 rounded-pill shadow-sm hover-lift">
+                                    <i class="bi bi-arrow-clockwise me-2"></i> Reset
+                                </button>
+                                <button type="submit" class="btn btn-gradient btn-lg px-5 rounded-pill shadow-lg hover-lift" id="submitBtn">
+                                    <i class="bi bi-check-circle me-2"></i> Update Department
+                                    <span class="spinner-border spinner-border-sm d-none ms-2" id="loadingSpinner"></span>
+                                </button>
+                            </div>
                         </div>
                     </form>
+                </div>
+            </div>
+
+            <div class="mt-4 animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="alert alert-light border-0 shadow-sm rounded-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-exclamation-triangle text-warning fs-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-1">Editing Guidelines</h6>
+                            <ul class="list-unstyled mb-0 small">
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Ensure the department name is unique</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Keep names descriptive and clear</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Changes will be reflected across the system</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -38,46 +90,296 @@
 </div>
 
 <style>
-    /* Card hover effect */
-    .card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    :root {
+        --warning-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 50%, #f6d365 100%);
+        --success-gradient: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);
+        --shadow-color: rgba(246, 211, 101, 0.1);
     }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-
-    /* Input styling */
-    .form-control {
-        border-radius: 10px;
-        border: 1px solid #ddd;
+    .shadow-3d {
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 5px 15px rgba(0,0,0,0.05), inset 0 0 1px rgba(255,255,255,0.5);
     }
 
-        .form-control:focus {
+    .text-gradient {
+        background: var(--warning-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .floating-label-group {
+        position: relative;
+        margin-top: 1.5rem;
+    }
+
+    .floating-input {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+        .floating-input:focus {
             border-color: #f6d365;
-            box-shadow: 0 0 8px rgba(246,211,101,0.3);
+            box-shadow: 0 0 0 3px rgba(246, 211, 101, 0.15);
+            transform: translateY(-2px);
         }
 
-    /* Gradient button */
+            .floating-input:focus + .floating-label,
+            .floating-input:not(:placeholder-shown) + .floating-label {
+                top: -12px;
+                left: 15px;
+                font-size: 0.85rem;
+                color: #f6d365;
+                background: white;
+                padding: 0 8px;
+                font-weight: 600;
+            }
+
+    .floating-label {
+        position: absolute;
+        top: 1rem;
+        left: 1.25rem;
+        color: #6c757d;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        background: transparent;
+    }
+
     .btn-gradient {
-        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        background: var(--success-gradient);
         border: none;
-        transition: transform 0.2s, box-shadow 0.2s;
+        color: white;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
     }
 
         .btn-gradient:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(253,160,133,0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(28, 200, 138, 0.3);
+            color: white;
         }
 
-    .btn i {
-        margin-right: 6px;
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+    }
+
+    .pattern-dots {
+        background-image: radial-gradient(circle, rgba(255,255,255,0.3) 2px, transparent 2px);
+        background-size: 40px 40px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .validation-message {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.875rem;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .input-feedback {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .floating-input:valid ~ .input-feedback {
+        opacity: 1;
+        color: #1cc88a;
+    }
+
+    .floating-input:invalid ~ .input-feedback {
+        opacity: 1;
+        color: #e74a3b;
+    }
+
+    #charCount {
+        font-weight: 600;
+        color: #f6d365;
+    }
+
+    .floating-input.is-valid {
+        border-color: #1cc88a !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%231cc88a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(.375em + .1875rem) center;
+        background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+    }
+
+    .floating-input.is-invalid {
+        border-color: #e74a3b !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23e74a3b'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74a3b' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(.375em + .1875rem) center;
+        background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+    }
+
+    .floating-label::after {
+        content: " *";
+        color: #e74a3b;
+    }
+
+    @@media (max-width: 768px) {
+        .card-body
+
+    {
+        padding: 2rem !important;
+    }
+
+    .btn-group {
+        width: 100%;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+        .btn-group .btn {
+            width: 100%;
+        }
+
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 </style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-    <!-- Bootstrap icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('departmentName');
+            const charCount = document.getElementById('charCount');
+
+            if (nameInput && charCount) {
+                nameInput.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+
+                    if (this.value.length > 40) {
+                        charCount.style.color = '#e74a3b';
+                    } else if (this.value.length > 30) {
+                        charCount.style.color = '#f6c23e';
+                    } else {
+                        charCount.style.color = '#f6d365';
+                    }
+                });
+            }
+
+            const form = document.getElementById('editForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            const floatingInput = document.querySelector('.floating-input');
+            const inputFeedback = document.querySelector('.input-feedback');
+
+            if (floatingInput) {
+                if (floatingInput.value.trim() !== '') {
+                    floatingInput.classList.add('is-valid');
+                    if (inputFeedback) {
+                        inputFeedback.innerHTML = '<i class="bi bi-check-circle-fill"></i>';
+                        inputFeedback.style.opacity = '1';
+                    }
+                }
+
+                floatingInput.addEventListener('input', function() {
+                    if (this.validity.valid) {
+                        if (inputFeedback) {
+                            inputFeedback.innerHTML = '<i class="bi bi-check-circle-fill"></i>';
+                        }
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    } else {
+                        if (inputFeedback) {
+                            inputFeedback.innerHTML = '<i class="bi bi-exclamation-circle-fill"></i>';
+                        }
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+
+                floatingInput.addEventListener('blur', function() {
+                    if (this.value.trim() === '') {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+            }
+
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    if (!form.checkValidity()) {
+                        e.stopPropagation();
+                        form.classList.add('was-validated');
+
+                        const invalidFields = form.querySelectorAll(':invalid');
+                        invalidFields.forEach(field => {
+                            field.classList.add('animate__animated', 'animate__headShake');
+                            setTimeout(() => {
+                                field.classList.remove('animate__animated', 'animate__headShake');
+                            }, 1000);
+                        });
+
+                        return false;
+                    }
+
+                    submitBtn.disabled = true;
+                    loadingSpinner.classList.remove('d-none');
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Updating...';
+
+                    form.submit();
+                });
+            }
+
+            const patternHtml = `
+                <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10">
+                    <div class="pattern-dots" style="transform: rotate(45deg);"></div>
+                </div>
+            `;
+            const cardHeader = document.querySelector('.card-header');
+            if (cardHeader) {
+                cardHeader.innerHTML += patternHtml;
+            }
+
+            const resetBtn = form.querySelector('button[type="reset"]');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    form.classList.remove('was-validated');
+
+                    if (floatingInput) {
+                        floatingInput.classList.remove('is-valid', 'is-invalid');
+                    }
+
+                    if (inputFeedback) {
+                        inputFeedback.innerHTML = '';
+                        inputFeedback.style.opacity = '0';
+                    }
+
+                    if (charCount) {
+                        charCount.textContent = '0';
+                        charCount.style.color = '#f6d365';
+                    }
+                });
+            }
+        });
+    </script>
 }

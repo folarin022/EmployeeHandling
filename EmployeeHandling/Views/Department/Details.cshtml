@@ -4,63 +4,353 @@
     ViewData["Title"] = "Department Details";
 }
 
-<div class="container mt-5">
-    <div class="card shadow-lg rounded-4 border-0">
-        <div class="card-header bg-gradient-success text-white d-flex justify-content-between align-items-center">
-            <h4 class="mb-0"><i class="bi bi-building me-2"></i> Department Details</h4>
-            <span class="badge bg-light text-success fs-6">@Model.Name</span>
-        </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-10">
+            <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                <div class="d-inline-block p-3 mb-3 rounded-circle" style="background: linear-gradient(135deg, #1cc88a20, #28a74520);">
+                    <i class="bi bi-building text-gradient fs-1"></i>
+                </div>
+                <h1 class="fw-bold text-gradient display-6 mb-2">Department Details</h1>
+                <p class="text-muted lead">View comprehensive information about this department</p>
+            </div>
 
-        <div class="card-body">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="p-3 bg-light rounded-3">
-                        <h6 class="text-muted"><i class="bi bi-hash me-1"></i> Department ID</h6>
-                        <p class="mb-0">@Model.Id</p>
+            <div class="card border-0 shadow-3d rounded-4 overflow-hidden animate__animated animate__fadeInUp">
+                <div class="card-header text-white position-relative overflow-hidden py-4 px-5" style="background: linear-gradient(135deg, #1cc88a 0%, #17a673 50%, #28a745 100%);">
+                    <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10">
+                        <div class="pattern-dots" style="transform: rotate(45deg);"></div>
+                    </div>
+                    <div class="position-relative z-2 d-flex justify-content-between align-items-center">
+                        <div>
+                            <h4 class="mb-0 fw-bold"><i class="bi bi-building me-2"></i> Department Profile</h4>
+                            <small class="opacity-75">Complete department information</small>
+                        </div>
+                        <span class="badge bg-light text-success fs-6 px-3 py-2 rounded-pill shadow-sm">@Model.Name</span>
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="p-3 bg-light rounded-3">
-                        <h6 class="text-muted"><i class="bi bi-building me-1"></i> Department Name</h6>
-                        <p class="mb-0">@Model.Name</p>
+                <div class="card-body p-5">
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="detail-card p-4 bg-light rounded-4 hover-lift">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="detail-icon bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px; height:48px;">
+                                        <i class="bi bi-hash fs-5"></i>
+                                    </div>
+                                    <h6 class="text-muted mb-0 fw-semibold text-uppercase small">Department ID</h6>
+                                </div>
+                                <p class="detail-value fs-5 fw-bold mb-0">@Model.Id</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="detail-card p-4 bg-light rounded-4 hover-lift">
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="detail-icon bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width:48px; height:48px;">
+                                        <i class="bi bi-building fs-5"></i>
+                                    </div>
+                                    <h6 class="text-muted mb-0 fw-semibold text-uppercase small">Department Name</h6>
+                                </div>
+                                <p class="detail-value fs-5 fw-bold mb-0">@Model.Name</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-5 pt-4 border-top">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="stat-card p-3 bg-primary bg-opacity-5 rounded-4 text-center">
+                                    <div class="stat-icon bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px; height:60px;">
+                                        <i class="bi bi-people fs-4"></i>
+                                    </div>
+                                    <h4 class="stat-value fw-bold mb-1">0</h4>
+                                    <p class="stat-label text-muted mb-0 small">Total Employees</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="stat-card p-3 bg-info bg-opacity-5 rounded-4 text-center">
+                                    <div class="stat-icon bg-info bg-opacity-10 text-info rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px; height:60px;">
+                                        <i class="bi bi-clock fs-4"></i>
+                                    </div>
+                                    <h4 class="stat-value fw-bold mb-1">Just Now</h4>
+                                    <p class="stat-label text-muted mb-0 small">Last Updated</p>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="stat-card p-3 bg-warning bg-opacity-5 rounded-4 text-center">
+                                    <div class="stat-icon bg-warning bg-opacity-10 text-warning rounded-circle d-inline-flex align-items-center justify-content-center mb-2" style="width:60px; height:60px;">
+                                        <i class="bi bi-calendar fs-4"></i>
+                                    </div>
+                                    <h4 class="stat-value fw-bold mb-1">Today</h4>
+                                    <p class="stat-label text-muted mb-0 small">Created Date</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center pt-5 mt-4 border-top">
+                        <a asp-action="FrontPage" class="btn btn-outline-secondary btn-lg px-4 rounded-pill shadow-sm hover-lift">
+                            <i class="bi bi-arrow-left me-2"></i> Back to List
+                        </a>
+
+                        <div class="btn-group" role="group">
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-lg px-4 rounded-pill shadow-sm hover-lift">
+                                <i class="bi bi-pencil-square me-2"></i> Edit Department
+                            </a>
+                            <button type="button" class="btn btn-danger btn-lg px-4 rounded-pill shadow-sm hover-lift" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="bi bi-trash me-2"></i> Delete
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mt-4 d-flex justify-content-end gap-2">
-                <a asp-action="FrontPage" class="btn btn-secondary shadow-sm">
-                    <i class="bi bi-arrow-left me-1"></i> Back
-                </a>
-
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning shadow-sm">
-                    <i class="bi bi-pencil-square me-1"></i> Edit
-                </a>
+            <div class="mt-4 animate__animated animate__fadeInUp animate__delay-1s">
+                <div class="alert alert-light border-0 shadow-sm rounded-4">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <i class="bi bi-info-circle text-primary fs-4"></i>
+                        </div>
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="mb-1">Department Information</h6>
+                            <ul class="list-unstyled mb-0 small">
+                                <li><i class="bi bi-check-circle text-success me-2"></i> This department is currently active in the system</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> All associated employees will be listed here when added</li>
+                                <li><i class="bi bi-check-circle text-success me-2"></i> Department details can be edited or updated as needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-@section Scripts {
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-}
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-body text-center p-5">
+                <div class="danger-animation mb-4">
+                    <div class="warning-sign">
+                        <svg width="100" height="100" viewBox="0 0 100 100">
+                            <circle class="warning-circle" cx="50" cy="50" r="45" fill="none" />
+                            <path class="warning-exclamation" d="M50,20 L50,60" fill="none" />
+                            <circle class="warning-dot" cx="50" cy="70" r="3" fill="#e74a3b" />
+                        </svg>
+                    </div>
+                </div>
+                <h4 class="fw-bold text-danger mb-3">Delete Department</h4>
+                <p class="text-muted mb-4">Are you sure you want to delete the department <strong>"@Model.Name"</strong>?</p>
+                <p class="text-muted small mb-4">This action cannot be undone. All associated data will be removed.</p>
+                <div class="d-flex justify-content-center gap-3">
+                    <button type="button" class="btn btn-outline-secondary px-4 rounded-pill" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <form asp-action="Delete" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.Id" />
+                        <button type="submit" class="btn btn-danger px-4 rounded-pill">
+                            Delete Department
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
-    .bg-gradient-success {
-        background: linear-gradient(135deg, #28a745, #1e7e34);
+    :root {
+        --success-gradient: linear-gradient(135deg, #1cc88a 0%, #17a673 50%, #28a745 100%);
+        --shadow-color: rgba(28, 200, 138, 0.1);
     }
 
-    .card-body h6 {
-        font-weight: 600;
-        font-size: 0.9rem;
+    .shadow-3d {
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 5px 15px rgba(0,0,0,0.05), inset 0 0 1px rgba(255,255,255,0.5);
     }
 
-    .card-body p {
-        font-size: 1rem;
-        margin-bottom: 0;
+    .text-gradient {
+        background: var(--success-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
     }
 
-    .btn i {
-        vertical-align: middle;
+    .detail-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+    }
+
+    .detail-icon {
+        transition: all 0.3s ease;
+    }
+
+    .detail-card:hover .detail-icon {
+        transform: scale(1.1);
+    }
+
+    .detail-value {
+        color: #2d3748;
+        transition: all 0.3s ease;
+    }
+
+    .detail-card:hover .detail-value {
+        color: #1cc88a;
+    }
+
+    .stat-card {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+    .stat-icon {
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-icon {
+        transform: rotate(10deg);
+    }
+
+    .stat-value {
+        color: #2d3748;
+        transition: all 0.3s ease;
+    }
+
+    .stat-card:hover .stat-value {
+        color: #667eea;
+    }
+
+    .pattern-dots {
+        background-image: radial-gradient(circle, rgba(255,255,255,0.3) 2px, transparent 2px);
+        background-size: 40px 40px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .danger-animation {
+        display: flex;
+        justify-content: center;
+    }
+
+    .warning-sign {
+        width: 100px;
+        height: 100px;
+    }
+
+    .warning-circle {
+        stroke-dasharray: 283;
+        stroke-dashoffset: 283;
+        stroke-width: 2;
+        stroke: #e74a3b;
+        fill: none;
+        animation: circleStroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+    }
+
+    .warning-exclamation {
+        stroke-dasharray: 40;
+        stroke-dashoffset: 40;
+        stroke-width: 3;
+        stroke: #e74a3b;
+        animation: exclamationStroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+    }
+
+    .warning-dot {
+        fill: #e74a3b;
+        opacity: 0;
+        animation: dotFadeIn 0.3s ease 1.1s forwards;
+    }
+
+    .btn-group .btn {
+        border-radius: 6px !important;
+        margin: 0 2px;
+    }
+
+        .btn-group .btn:first-child {
+            border-top-left-radius: 20px !important;
+            border-bottom-left-radius: 20px !important;
+        }
+
+        .btn-group .btn:last-child {
+            border-top-right-radius: 20px !important;
+            border-bottom-right-radius: 20px !important;
+        }
+
+    @@media (max-width: 768px) {
+        .card-body
+
+    {
+        padding: 2rem !important;
+    }
+
+    .btn-group {
+        width: 100%;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+        .btn-group .btn {
+            width: 100%;
+        }
+
+    }
+
+    @@keyframes circleStroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @@keyframes exclamationStroke {
+        100% {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @@keyframes dotFadeIn {
+        to {
+            opacity: 1;
+        }
     }
 </style>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const patternHtml = `
+                <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10">
+                    <div class="pattern-dots" style="transform: rotate(45deg);"></div>
+                </div>
+            `;
+            const cardHeader = document.querySelector('.card-header');
+            if (cardHeader) {
+                cardHeader.innerHTML += patternHtml;
+            }
+
+            const detailCards = document.querySelectorAll('.detail-card');
+            detailCards.forEach(card => {
+                card.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+                card.classList.add('animate__animated', 'animate__fadeInUp');
+            });
+        });
+    </script>
+}

@@ -64,24 +64,43 @@ namespace EmployeeHandling.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid id,CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
         {
-            if (id == Guid.Empty)
-                return NotFound();
-
             var response = await _departmentService.GetDepartmentById(id,cancellationToken);
 
             if (!response.IsSuccess || response.Data == null)
                 return NotFound();
-
-            var dto = new EditDepartmentDto
+            
+            var model = new EditDepartmentDto
             {
                 Id = response.Data.Id,
                 Name = response.Data.Name
             };
 
-            return View(dto);
+            return View(model); 
         }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid Id,EditDepartmentDto request,CancellationToken cancellationToken)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(request);
+            }
+
+            var result = await _departmentService.UpdateDepartment(Id,request,cancellationToken);
+
+            if (!result.IsSuccess)
+            {
+                ModelState.AddModelError("", result.Message);
+                return View(request);
+            }
+
+            return RedirectToAction("FrontPage");
+        }
+    
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)

@@ -4,141 +4,391 @@
     ViewData["Title"] = "Add Employee";
 }
 
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card shadow-lg rounded-5 border-0">
-                <!-- Gradient Header -->
-                <div class="card-header bg-gradient-primary text-white text-center py-4 rounded-top-5">
-                    <h3 class="mb-0"><i class="bi bi-person-plus me-2"></i> Add New Employee</h3>
+        <div class="col-xl-10">
+            <div class="text-center mb-5 animate__animated animate__fadeInDown">
+                <div class="d-inline-block p-3 mb-3 rounded-circle" style="background: linear-gradient(135deg, #4e73df20, #1cc88a20);">
+                    <i class="bi bi-person-plus text-gradient fs-1"></i>
+                </div>
+                <h1 class="fw-bold text-gradient display-6 mb-2">Add New Employee</h1>
+                <p class="text-muted lead">Complete the form below to register a new employee in the system</p>
+            </div>
+
+            <div class="card border-0 shadow-3d rounded-4 overflow-hidden animate__animated animate__fadeInUp">
+                <div class="card-header text-white position-relative overflow-hidden py-4 px-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4e73df 100%);">
+                    <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10">
+                        <div class="pattern-dots" style="transform: rotate(45deg);"></div>
+                    </div>
+                    <div class="position-relative z-2">
+                        <h4 class="mb-0 fw-bold"><i class="bi bi-person-badge me-2"></i> Employee Information</h4>
+                        <small class="opacity-75">Fill in all required details to complete registration</small>
+                    </div>
                 </div>
 
-                <!-- Card Body -->
                 <div class="card-body p-5">
-                    <form asp-action="CreateEmployee" asp-controller="Employee" method="post">
+                    <form asp-action="CreateEmployee" asp-controller="Employee" method="post" id="employeeForm">
                         @Html.AntiForgeryToken()
 
-                        <div class="row g-4">
-                            <!-- First & Last Name -->
-                            <div class="col-md-6 form-floating">
-                                <input asp-for="FirstName" class="form-control form-control-lg" />
-                                <label asp-for="FirstName" class="fw-semibold">First Name</label>
-                                <span asp-validation-for="FirstName" class="text-danger small"></span>
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6 form-group floating-label-group">
+                                <input asp-for="FirstName" class="form-control form-control-lg shadow-sm floating-input" placeholder=" " />
+                                <label asp-for="FirstName" class="floating-label">
+                                    <i class="bi bi-person me-2"></i>First Name
+                                </label>
+                                <span asp-validation-for="FirstName" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <div class="col-md-6 form-floating">
-                                <input asp-for="LastName" class="form-control form-control-lg" />
-                                <label asp-for="LastName" class="fw-semibold">Last Name</label>
-                                <span asp-validation-for="LastName" class="text-danger small"></span>
+                            <div class="col-md-6 form-group floating-label-group">
+                                <input asp-for="LastName" class="form-control form-control-lg shadow-sm floating-input" placeholder=" " />
+                                <label asp-for="LastName" class="floating-label">
+                                    <i class="bi bi-person me-2"></i>Last Name
+                                </label>
+                                <span asp-validation-for="LastName" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <!-- Other Name & Gender -->
-                            <div class="col-md-6 form-floating">
-                                <input asp-for="OtherName" class="form-control form-control-lg" />
-                                <label asp-for="OtherName" class="fw-semibold">Other Name</label>
-                                <span asp-validation-for="OtherName" class="text-danger small"></span>
+                            <div class="col-md-6 form-group floating-label-group">
+                                <input asp-for="OtherName" class="form-control form-control-lg shadow-sm floating-input" placeholder=" " />
+                                <label asp-for="OtherName" class="floating-label">
+                                    <i class="bi bi-person me-2"></i>Other Name
+                                </label>
+                                <span asp-validation-for="OtherName" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <div class="col-md-6 form-floating">
-                                <select asp-for="Gender" class="form-select form-select-lg">
-                                    <option value="">-- Select Gender --</option>
+                            <div class="col-md-6 form-group floating-label-group">
+                                <select asp-for="Gender" class="form-select form-select-lg shadow-sm floating-select" id="genderSelect">
+                                    <option value=""></option>
                                     <option value="Male">Male</option>
                                     <option value="Female">Female</option>
                                 </select>
-                                <label asp-for="Gender" class="fw-semibold">Gender</label>
-                                <span asp-validation-for="Gender" class="text-danger small"></span>
+                                <label asp-for="Gender" class="floating-label-select">
+                                    <i class="bi bi-gender-ambiguous me-2"></i>Gender
+                                </label>
+                                <span asp-validation-for="Gender" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <!-- Email & Phone -->
-                            <div class="col-md-6 form-floating">
-                                <input asp-for="Email" class="form-control form-control-lg" />
-                                <label asp-for="Email" class="fw-semibold">Email</label>
-                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            <div class="col-md-6 form-group floating-label-group">
+                                <input asp-for="Email" class="form-control form-control-lg shadow-sm floating-input" placeholder=" " />
+                                <label asp-for="Email" class="floating-label">
+                                    <i class="bi bi-envelope me-2"></i>Email Address
+                                </label>
+                                <span asp-validation-for="Email" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <div class="col-md-6 form-floating">
-                                <input asp-for="PhoneNumber" class="form-control form-control-lg" />
-                                <label asp-for="PhoneNumber" class="fw-semibold">Phone Number</label>
-                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            <div class="col-md-6 form-group floating-label-group">
+                                <input asp-for="PhoneNumber" class="form-control form-control-lg shadow-sm floating-input" placeholder=" " />
+                                <label asp-for="PhoneNumber" class="floating-label">
+                                    <i class="bi bi-phone me-2"></i>Phone Number
+                                </label>
+                                <span asp-validation-for="PhoneNumber" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <!-- Address -->
-                            <div class="col-12 form-floating">
-                                <input asp-for="Address" class="form-control form-control-lg" />
-                                <label asp-for="Address" class="fw-semibold">Address</label>
-                                <span asp-validation-for="Address" class="text-danger small"></span>
+                            <div class="col-12 form-group floating-label-group">
+                                <input asp-for="Address" class="form-control form-control-lg shadow-sm floating-input" placeholder=" " />
+                                <label asp-for="Address" class="floating-label">
+                                    <i class="bi bi-geo-alt me-2"></i>Address
+                                </label>
+                                <span asp-validation-for="Address" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
 
-                            <!-- Department -->
-                            <div class="col-12 form-floating">
-                                <select asp-for="DepartmentId" class="form-select form-select-lg" asp-items="Model.Departments">
-                                    <option value="">-- Select Department --</option>
+                            <div class="col-12 form-group floating-label-group">
+                                <select asp-for="DepartmentId" class="form-select form-select-lg shadow-sm floating-select" asp-items="Model.Departments" id="departmentSelect">
+                                    <option value=""></option>
                                 </select>
-                                <label asp-for="DepartmentId" class="fw-semibold">Department</label>
-                                <span asp-validation-for="DepartmentId" class="text-danger small"></span>
+                                <label asp-for="DepartmentId" class="floating-label-select">
+                                    <i class="bi bi-building me-2"></i>Department
+                                </label>
+                                <span asp-validation-for="DepartmentId" class="text-danger validation-message"></span>
+                                <div class="input-feedback"></div>
                             </div>
                         </div>
 
-                        <!-- Buttons -->
-                        <div class="d-flex justify-content-between mt-5">
-                            <a class="btn btn-outline-secondary btn-lg shadow-sm" href="@Url.Action("RearPage", "Employee")">
-                                <i class="bi bi-arrow-left me-1"></i> Back
+                        <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+                            <a class="btn btn-outline-secondary btn-lg px-4 rounded-pill shadow-sm hover-lift" href="@Url.Action("RearPage", "Employee")">
+                                <i class="bi bi-arrow-left me-2"></i> Back to List
                             </a>
 
-                            <button type="submit" class="btn btn-success btn-lg shadow-sm">
-                                <i class="bi bi-plus-circle me-1"></i> Add Employee
-                            </button>
+                            <div class="btn-group" role="group">
+                                <button type="reset" class="btn btn-light btn-lg px-4 rounded-pill shadow-sm hover-lift">
+                                    <i class="bi bi-arrow-clockwise me-2"></i> Reset
+                                </button>
+                                <button type="submit" class="btn btn-gradient btn-lg px-5 rounded-pill shadow-lg hover-lift" id="submitBtn">
+                                    <i class="bi bi-person-plus me-2"></i> Add Employee
+                                    <span class="spinner-border spinner-border-sm d-none ms-2" id="loadingSpinner"></span>
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
+
         </div>
     </div>
 </div>
 
-<!-- Styles -->
 <style>
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #4e73df, #224abe);
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #4e73df 100%);
+        --success-gradient: linear-gradient(135deg, #1cc88a 0%, #17a673 100%);
+        --shadow-color: rgba(102, 126, 234, 0.1);
     }
 
-    .card {
-        border-radius: 2rem;
-        transition: transform 0.3s, box-shadow 0.3s;
+    .shadow-3d {
+        box-shadow: 0 10px 40px rgba(0,0,0,0.08), 0 5px 15px rgba(0,0,0,0.05), inset 0 0 1px rgba(255,255,255,0.5);
     }
 
-        .card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    .text-gradient {
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .floating-label-group {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+
+    .floating-input, .floating-select {
+        border: 2px solid #e9ecef;
+        border-radius: 12px;
+        padding: 1rem 1.25rem;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        background: white;
+        height: calc(3.5rem + 2px);
+    }
+
+        .floating-input:focus, .floating-select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+            transform: translateY(-2px);
         }
 
-    .form-control, .form-select {
-        border-radius: 1rem;
-        padding: 1rem;
+            .floating-input:focus + .floating-label,
+            .floating-input:not(:placeholder-shown) + .floating-label,
+            .floating-select:focus + .floating-label-select,
+            .floating-select:not([value=""]) + .floating-label-select {
+                top: -12px;
+                left: 15px;
+                font-size: 0.85rem;
+                color: #667eea;
+                background: white;
+                padding: 0 8px;
+                font-weight: 600;
+            }
+
+    .floating-label, .floating-label-select {
+        position: absolute;
+        top: 1rem;
+        left: 1.25rem;
+        color: #6c757d;
+        transition: all 0.3s ease;
+        pointer-events: none;
+        background: transparent;
     }
 
-    .form-floating > label {
-        color: #495057;
+    .btn-gradient {
+        background: var(--success-gradient);
+        border: none;
+        color: white;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
     }
 
-    .btn i {
-        vertical-align: middle;
+        .btn-gradient:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(28, 200, 138, 0.3);
+            color: white;
+        }
+
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
     }
 
-    /* Responsive padding fix */
-    <text >
+    .pattern-dots {
+        background-image: radial-gradient(circle, rgba(255,255,255,0.3) 2px, transparent 2px);
+        background-size: 40px 40px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .validation-message {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.875rem;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .input-feedback {
+        position: absolute;
+        right: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .floating-input:valid ~ .input-feedback,
+    .floating-select:valid ~ .input-feedback {
+        opacity: 1;
+        color: #1cc88a;
+    }
+
+    .floating-input:invalid ~ .input-feedback,
+    .floating-select:invalid ~ .input-feedback {
+        opacity: 1;
+        color: #e74a3b;
+    }
+
+    .floating-input.is-valid, .floating-select.is-valid {
+        border-color: #1cc88a !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%231cc88a' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(.375em + .1875rem) center;
+        background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+    }
+
+    .floating-input.is-invalid, .floating-select.is-invalid {
+        border-color: #e74a3b !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23e74a3b'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23e74a3b' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(.375em + .1875rem) center;
+        background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+    }
+
+    .floating-label::after, .floating-label-select::after {
+        content: " *";
+        color: #e74a3b;
+    }
+
     @@media (max-width: 768px) {
         .card-body
 
     {
-        padding: 2rem;
+        padding: 2rem !important;
     }
 
+    .btn-group {
+        width: 100%;
+        flex-direction: column;
+        gap: 1rem;
     }
-    </text >
+
+        .btn-group .btn {
+            width: 100%;
+        }
+
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 </style>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('employeeForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+
+            const inputs = form.querySelectorAll('.floating-input, .floating-select');
+            const feedbackElements = form.querySelectorAll('.input-feedback');
+
+            inputs.forEach((input, index) => {
+                input.addEventListener('input', function() {
+                    if (this.validity.valid) {
+                        feedbackElements[index].innerHTML = '<i class="bi bi-check-circle-fill"></i>';
+                        this.classList.remove('is-invalid');
+                        this.classList.add('is-valid');
+                    } else {
+                        feedbackElements[index].innerHTML = '<i class="bi bi-exclamation-circle-fill"></i>';
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+
+                input.addEventListener('blur', function() {
+                    if (this.value.trim() === '') {
+                        this.classList.remove('is-valid');
+                        this.classList.add('is-invalid');
+                    }
+                });
+            });
+
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    if (!form.checkValidity()) {
+                        e.stopPropagation();
+                        form.classList.add('was-validated');
+
+                        const invalidFields = form.querySelectorAll(':invalid');
+                        invalidFields.forEach(field => {
+                            field.classList.add('animate__animated', 'animate__headShake');
+                            setTimeout(() => {
+                                field.classList.remove('animate__animated', 'animate__headShake');
+                            }, 1000);
+                        });
+
+                        return false;
+                    }
+
+                    submitBtn.disabled = true;
+                    loadingSpinner.classList.remove('d-none');
+                    submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i> Adding Employee...';
+
+                    form.submit();
+                });
+            }
+
+            const patternHtml = `
+                <div class="position-absolute top-0 end-0 w-100 h-100 opacity-10">
+                    <div class="pattern-dots" style="transform: rotate(45deg);"></div>
+                </div>
+            `;
+            const cardHeader = document.querySelector('.card-header');
+            if (cardHeader) {
+                cardHeader.innerHTML += patternHtml;
+            }
+
+            const resetBtn = form.querySelector('button[type="reset"]');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    form.classList.remove('was-validated');
+
+                    inputs.forEach(input => {
+                        input.classList.remove('is-valid', 'is-invalid');
+                    });
+
+                    feedbackElements.forEach(feedback => {
+                        feedback.innerHTML = '';
+                    });
+                });
+            }
+        });
+    </script>
 }
