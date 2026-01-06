@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
-
-namespace EmployeeHandling.Dto
+﻿namespace EmployeeHandling.Dto
 {
     public class BaseResponse<T>
     {

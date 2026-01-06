@@ -17,7 +17,7 @@ namespace EmployeeManagement.Service
 
         public DepartmentService(
             IDepartmentRepository departmentRepository,
-            ILogger<DepartmentService> logger,  
+            ILogger<DepartmentService> logger,
             ApplicationDbContext dbContext
         )
         {

@@ -8,7 +8,7 @@ namespace EmployeeManagement.Repository
 {
     public class DepartmentRepository(ApplicationDbContext _dbContext) : IDepartmentRepository
     {
-       
+
 
         public async Task<bool> AddDepartment(AddDepartmentDto dto, CancellationToken cancellationToken)
         {

@@ -1,4 +1,5 @@
-﻿using EmployeeHandling.Context;
+﻿
+using EmployeeHandling.Context;
 using EmployeeHandling.Data;
 using EmployeeHandling.Dto;
 using EmployeeHandling.Dto.EmployeeModel;
@@ -128,8 +129,8 @@ namespace EmployeeHandling.Service
                     Email = e.Email,
                     PhoneNumber = e.PhoneNumber,
                     Address = e.Address,
-                    DepartmentId = e.DepartmentId,           
-                    Department = e.Department?.Name
+                    DepartmentId = e.DepartmentId,
+                    Department = e.Department.Name
                 }).ToList();
 
                 response.IsSuccess = true;
@@ -162,7 +163,7 @@ namespace EmployeeHandling.Service
         public async Task<Employee?> GetEmployeeById(Guid id, CancellationToken cancellationToken)
         {
             return await _dbContext.Employees
-            .Include(e => e.Department) 
+            .Include(e => e.Department)
             .FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
         }
 
@@ -171,7 +172,9 @@ namespace EmployeeHandling.Service
             var employee = await _dbContext.Employees.FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
 
             if (employee == null)
+            {
                 return new BaseResponse<bool> { IsSuccess = false, Message = "Employee not found" };
+            }
 
             employee.FirstName = request.FirstName;
             employee.LastName = request.LastName;

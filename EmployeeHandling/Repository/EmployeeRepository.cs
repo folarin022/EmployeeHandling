@@ -46,7 +46,7 @@ namespace EmployeeHandling.Repository
 
         public async Task<List<Employee>> GetAllEmployee(CancellationToken cancellationToken)
         {
-           return await _dbContext.Employees.ToListAsync(cancellationToken);
+            return await _dbContext.Employees.ToListAsync(cancellationToken);
         }
 
         public async Task<Employee> GetEmployeeById(Guid Id, CancellationToken cancellationToken)

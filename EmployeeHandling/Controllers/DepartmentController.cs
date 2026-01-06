@@ -66,31 +66,31 @@ namespace EmployeeHandling.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id, CancellationToken cancellationToken)
         {
-            var response = await _departmentService.GetDepartmentById(id,cancellationToken);
+            var response = await _departmentService.GetDepartmentById(id, cancellationToken);
 
             if (!response.IsSuccess || response.Data == null)
                 return NotFound();
-            
+
             var model = new EditDepartmentDto
             {
                 Id = response.Data.Id,
                 Name = response.Data.Name
             };
 
-            return View(model); 
+            return View(model);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid Id,EditDepartmentDto request,CancellationToken cancellationToken)
+        public async Task<IActionResult> Edit(Guid Id, EditDepartmentDto request, CancellationToken cancellationToken)
         {
             if (!ModelState.IsValid)
             {
                 return View(request);
             }
 
-            var result = await _departmentService.UpdateDepartment(Id,request,cancellationToken);
+            var result = await _departmentService.UpdateDepartment(Id, request, cancellationToken);
 
             if (!result.IsSuccess)
             {
@@ -100,7 +100,7 @@ namespace EmployeeHandling.Controllers
 
             return RedirectToAction("FrontPage");
         }
-    
+
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id, CancellationToken cancellationToken)
@@ -119,7 +119,7 @@ namespace EmployeeHandling.Controllers
                 Name = response.Data.Name
             };
 
-            return View(dto); 
+            return View(dto);
         }
 
 
@@ -132,7 +132,7 @@ namespace EmployeeHandling.Controllers
 
             var result = await _departmentService.DeleteDepartment(id, cancellationToken);
 
-            if (!result.IsSuccess) 
+            if (!result.IsSuccess)
             {
                 TempData["ToastMessage"] = $"error|{result.Message}";
             }

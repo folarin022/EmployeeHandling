@@ -96,7 +96,7 @@ namespace EmployeeHandling.Controllers
                 PhoneNumber = employee.PhoneNumber,
                 Address = employee.Address,
                 DepartmentId = employee.DepartmentId,
-                Departments = await _employeeService.GetDepartmentsForDropdown() 
+                Departments = await _employeeService.GetDepartmentsForDropdown()
             };
 
             return View(dto);
@@ -123,7 +123,7 @@ namespace EmployeeHandling.Controllers
                 return View(dto);
             }
 
-            TempData["ToastMessage" ] = $"success|Employee updated successfully!";
+            TempData["ToastMessage"] = $"success|Employee updated successfully!";
             return RedirectToAction("RearPage");
         }
 
@@ -148,7 +148,7 @@ namespace EmployeeHandling.Controllers
                 Email = employee.Email,
                 PhoneNumber = employee.PhoneNumber,
                 Address = employee.Address,
-                Department = employee.Department?.Name 
+                Department = employee.Department?.Name
             };
 
             return View(dto);

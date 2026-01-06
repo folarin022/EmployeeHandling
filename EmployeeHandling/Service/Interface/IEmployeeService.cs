@@ -1,5 +1,4 @@
-﻿
-using EmployeeHandling.Data;
+﻿using EmployeeHandling.Data;
 using EmployeeHandling.Dto;
 using EmployeeHandling.Dto.EmployeeModel;
 using Microsoft.AspNetCore.Mvc.Rendering;
